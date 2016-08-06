@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.http import HttpResponse
 
 urlpatterns = [
+    url(r'^$', lambda request: HttpResponse('<h1>Memoir</h1>'), name = 'index'),
     url(r'^admin/', admin.site.urls),
 ]
