@@ -16,10 +16,10 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib.auth import views as auth_views
 from django.contrib import admin
-from django.http import HttpResponse
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
-    url(r'^$', lambda request: HttpResponse('<h1>Memoir</h1>'), name = 'index'),
+    url(r'^$', RedirectView.as_view(pattern_name = 'quote:list'), name = 'index'),
     url(r'^admin/', admin.site.urls),
     url(r'^login$', auth_views.login, {'template_name': 'profiles/login.html', }, name = 'login'),
     url(r'^switch_user$', auth_views.logout_then_login, name = 'switch-user'),
