@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block title %}Update {{ quote }}{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <form class="form" action="edit" method="POST">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-12">
+            {{ form|bootstrap }}
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-1 col-md-offset-10">
+            <button class="btn btn-default pull-right" type="button" onClick="javascript:history.go(-1);">Cancel</button>
+          </div>
+          <div class="col-md-1">
+            <button class="btn btn-primary pull-right" type="submit">Update</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

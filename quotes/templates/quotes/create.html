@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block title %}Add Quote{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <form class="form" role="form" action="create" method="POST">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-md-12">
+          {{ form|bootstrap }}
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-2 col-md-offset-10">
+          <button class="btn btn-default pull-right" type="submit">Create</button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

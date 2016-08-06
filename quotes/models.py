@@ -19,3 +19,6 @@ class Quote(Model):
         if self.id:
             return '#%d' % (self.id, )
         return 'Quote object'
+
+    def get_absolute_url(self):
+        return reverse('quote:detail', kwargs = {'pk': self.pk, })

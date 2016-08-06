@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ quote }}{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <p class="text-right">By {{ quote.author }} on {{ quote.created }}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          {% if quote.title %}
+            <div class="panel-heading">{{ quote.title }}</div>
+          {% endif %}
+          <div class="panel-body">{{ quote.text|linebreaksbr }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

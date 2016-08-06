@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^login$', auth_views.login, {'template_name': 'profiles/login.html', }, name = 'login'),
     url(r'^switch_user$', auth_views.logout_then_login, name = 'switch-user'),
     url(r'^user/', include('profiles.urls')),
+    url(r'^quote/', include('quotes.urls', namespace = 'quote')),
 ]
