@@ -3,5 +3,19 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="{% url 'index' %}">Memoir</a>
     </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <div class="navbar-text">
+            {% if user.is_authenticated %}
+              Logged in as {{ user }} (<a class="navbar-link" href="{% url 'switch-user' %}">switch</a>)
+            {% else %}
+              <a class="navbar-link" href="{% url 'login' %}">Login</a>
+            {% endif %}
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
+</div>
 </div>
