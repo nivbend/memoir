@@ -6,6 +6,11 @@
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
+          <div class="btn-nav">
+            <a class="btn btn-primary navbar-btn" href="{% url 'quote:create' %}">Create</a>
+          </div>
+        </li>
+        <li>
           <div class="navbar-text">
             {% if user.is_authenticated %}
               <span>Logged in as <a class="navbar-link" href="{% url 'user-profile' username=user.username %}">{{ user }}</a></span>
@@ -18,5 +23,4 @@
       </ul>
     </div>
   </div>
-</div>
 </div>
