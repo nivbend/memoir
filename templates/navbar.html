@@ -8,7 +8,8 @@
         <li>
           <div class="navbar-text">
             {% if user.is_authenticated %}
-              Logged in as {{ user }} (<a class="navbar-link" href="{% url 'switch-user' %}">switch</a>)
+              <span>Logged in as <a class="navbar-link" href="{% url 'user-profile' username=user.username %}">{{ user }}</a></span>
+              <span>(<a class="navbar-link" href="{% url 'switch-user' %}">switch</a>)</span>
             {% else %}
               <a class="navbar-link" href="{% url 'login' %}">Login</a>
             {% endif %}
