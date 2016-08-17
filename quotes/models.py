@@ -46,7 +46,7 @@ class Quote(Model):
                 pass
 
         # Mark referenced users as mentioned.
-        for reference in REGEX_REFERENCE.findall(self.text):
+        for (_, reference) in REGEX_REFERENCE.findall(self.text):
             try:
                 self.mentions.add(get_user_model().objects.get(username = reference))
             except get_user_model().DoesNotExist:

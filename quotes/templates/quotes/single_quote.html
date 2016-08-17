@@ -1,3 +1,5 @@
+{% load mentions %}
+
 <div class="row">
   <div class="col-md-12">
     <div class="panel panel-default">
@@ -15,7 +17,7 @@
         {% endif %}
         <span>(by {{ quote.author }})</span>
       </div>
-      <div class="panel-body">{{ quote.text|linebreaksbr }}</div>
+      <div class="panel-body">{{ quote.text|mentions|linebreaksbr }}</div>
       <div class="panel-footer clearfix">
         <span class="pull-right">{{ quote.created }}</span>
       </div>

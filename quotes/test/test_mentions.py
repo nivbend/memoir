@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 from quotes.models import Quote
+from ..templatetags.quotes import speakers, references, mentions
 
 class BaseMentionsTestCase(TestCase):
     def setUp(self):
@@ -139,3 +140,59 @@ class TestReferences(BaseMentionsTestCase):
         ]))
 
         self.assert_mentions(quote, [self.jerry, ])
+
+class TestFilters(BaseMentionsTestCase):
+    SPEAKER_JERRY = '<a class="speaker" href="/user/jerry_s">Jerry</a>'
+    SPEAKER_GEORGE = '<a class="speaker" href="/user/george_c">George</a>'
+    REFERENCE_JERRY = '<strong>Jerry</strong>'
+    REFERENCE_KRAMER = '<strong>Cosmo</strong>'
+    REFERENCE_ELAINE = '<strong>Elaine</strong>'
+
+    def setUp(self):
+        super(TestFilters, self).setUp()
+
+        # Print whole diffs.
+        self.maxDiff = None
+
+    def test_speakers(self):
+        quote = '\n'.join([
+            'george_c: You\'ve got to apologize.',
+        'jerry_s: Why?',
+        'george_c: Because it\'s the mature and adult thing to do.',
+        'jerry_s: How does that affect me?',
+        ])
+
+    expected_output = '\n'.join([
+            '%s: You\'ve got to apologize.' % (self.SPEAKER_GEORGE, ),
+        '%s: Why?' % (self.SPEAKER_JERRY, ),
+        '%s: Because it\'s the mature and adult thing to do.' % (self.SPEAKER_GEORGE, ),
+        '%s: How does that affect me?' % (self.SPEAKER_JERRY, ),
+    ])
+
+        self.assertMultiLineEqual(speakers(quote), expected_output)
+
+    def test_references(self):
+        self.assertMultiLineEqual(references('@jerry_s'), self.REFERENCE_JERRY)
+
+        quote = ''.join([
+            'elaine_b: Get out!',
+            '[@elaine_b pushes on @kramer\'s chest,',
+            'causing in to fall backwards through her swinging door]',
+        ])
+
+        expected_output = ''.join([
+            'elaine_b: Get out!',
+            '[%s pushes on %s\'s chest,' % (self.REFERENCE_ELAINE, self.REFERENCE_KRAMER, ),
+            'causing in to fall backwards through her swinging door]',
+        ])
+
+        self.assertMultiLineEqual(references(quote), expected_output)
+
+    def test_mentions(self):
+        self.assertMultiLineEqual(
+            mentions('george_c: @jerry_s, just remember, it\'s not a lie if you believe it.'),
+            '%s: %s, just remember, it\'s not a lie if you believe it.'
+                % (self.SPEAKER_GEORGE, self.REFERENCE_JERRY, ))
+
+    def test_escaped_reference(self):
+        self.assertEqual(references('\@jerry_s'), '&comat;jerry_s')
