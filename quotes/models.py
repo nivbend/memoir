@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.db.models import Model, SET_NULL
 from django.db.models import DateTimeField, ForeignKey, CharField, TextField, ManyToManyField
-from .regex import REGEX_SPEAKER
+from .regex import REGEX_SPEAKER, REGEX_REFERENCE
 
 @python_2_unicode_compatible
 class Quote(Model):
@@ -41,6 +41,14 @@ class Quote(Model):
         for speaker in REGEX_SPEAKER.findall(self.text):
             try:
                 self.mentions.add(get_user_model().objects.get(username = speaker))
+            except get_user_model().DoesNotExist:
+                # TODO: Log warning somewhere.
+                pass
+
+        # Mark referenced users as mentioned.
+        for reference in REGEX_REFERENCE.findall(self.text):
+            try:
+                self.mentions.add(get_user_model().objects.get(username = reference))
             except get_user_model().DoesNotExist:
                 # TODO: Log warning somewhere.
                 pass

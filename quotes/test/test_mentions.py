@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from quotes.models import Quote
 
-class TestSpeakers(TestCase):
+class BaseMentionsTestCase(TestCase):
     def setUp(self):
         self.lerry_david = User.objects.create_user(
             username = 'lerry_david',
@@ -32,6 +32,13 @@ class TestSpeakers(TestCase):
             first_name = 'Cosmo',
             last_name = 'Kramer')
 
+    def create_quote(self, text):
+        return Quote.objects.create(author = self.lerry_david, text = text)
+
+    def assert_mentions(self, quote, speakers):
+        self.assertQuerysetEqual(quote.mentions.all(), map(repr, speakers), ordered = False)
+
+class TestSpeakers(BaseMentionsTestCase):
     def test_empty_text(self):
         quote = self.create_quote('')
 
@@ -99,8 +106,36 @@ class TestSpeakers(TestCase):
         quote_2.delete()
         self.assertQuerysetEqual(self.george.mentioned_in.all(), [])
 
-    def create_quote(self, text):
-        return Quote.objects.create(author = self.lerry_david, text = text)
+class TestReferences(BaseMentionsTestCase):
+    def test_one_reference(self):
+        quote = self.create_quote('jerry_s: (about @kramer) If you feed him, he\'ll never leave.')
 
-    def assert_mentions(self, quote, speakers):
-        self.assertQuerysetEqual(quote.mentions.all(), map(repr, speakers), ordered = False)
+        self.assert_mentions(quote, [self.jerry, self.kramer, ])
+
+    def test_multiple_references(self):
+        quote = self.create_quote('frank_c: @george_c, festivus is your heritage!')
+
+        self.assert_mentions(quote, [self.george, ])
+
+        lloyd = User.objects.create_user(
+            username = 'lloyd',
+            password = 'password')
+
+        quote = self.create_quote('\n'.join([
+            '[@kramer, @jerry_s and @lloyd are sitting and chewing gum]',
+            'kramer: See, this is what the holidays are all about.',
+            ' Three buddies sitting around chewing gum.',
+        ]))
+
+        self.assert_mentions(quote, [self.kramer, self.jerry, lloyd, ])
+
+    def test_escaped_reference(self):
+        self.assert_mentions(self.create_quote('kramer\\@jerry_s.com'), [])
+
+    def test_unknown_reference(self):
+        quote = self.create_quote('\n'.join([
+            'newman: Hello, @jerry_s.',
+            'jerry_s: Hello, @newman.',
+        ]))
+
+        self.assert_mentions(quote, [self.jerry, ])
