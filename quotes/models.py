@@ -19,6 +19,11 @@ class Quote(Model):
         blank = True,
         editable = False,
         related_name = 'mentioned_in')
+    likers = ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank = True,
+        editable = False,
+        related_name = 'likes')
 
     def __str__(self):
         if self.title:

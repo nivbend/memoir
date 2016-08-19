@@ -1,5 +1,6 @@
 {% load mentions %}
 {% load profiles %}
+{% load likes %}
 
 <div class="row">
   <div class="col-md-12">
@@ -20,7 +21,18 @@
       </div>
       <div class="panel-body">{{ quote.text|mentions|linebreaksbr }}</div>
       <div class="panel-footer clearfix">
-        <span class="pull-right">{{ quote.created }}</span>
+        <div class="row">
+          <div class="col-md-7 col-md-offset-5">
+            <div class="row vertical-align">
+              <div class="col-md-10" style="padding-right: 0px;">
+                <span class="pull-right">{{ quote.created }}</span>
+              </div>
+              <div class="col-md-2" style="padding-left: 0px;">
+                <div class="btn-group pull-right" role="group">{% like_button %}</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

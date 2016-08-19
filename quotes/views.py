@@ -1,8 +1,11 @@
+from httplib import FORBIDDEN
+from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.http import HttpResponse, JsonResponse
 from .models import Quote
 
 class QuoteList(ListView):
@@ -66,3 +69,20 @@ class TopQuotes(QuoteList):
     def get_queryset(self):
         queryset = super(TopQuotes, self).get_queryset().annotate(likers_count = Count('likers'))
         return queryset.order_by('-likers_count', '-created')
+
+class LikeView(View):
+    def put(self, request, pk):
+        if self.request.user.pk is None:
+            return HttpResponse(status = FORBIDDEN)
+
+        quote = get_object_or_404(Quote, pk = pk)
+        quote.likers.add(self.request.user)
+        return JsonResponse({'likers': map(str, quote.likers.all()), })
+
+    def delete(self, request, pk):
+        if self.request.user.pk is None:
+            return HttpResponse(status = FORBIDDEN)
+
+        quote = get_object_or_404(Quote, pk = pk)
+        quote.likers.remove(self.request.user)
+        return JsonResponse({'likers': map(str, quote.likers.all()), })
