@@ -9,6 +9,32 @@ class QuoteList(ListView):
     template_name = 'quotes/list.html'
     context_object_name = 'quotes'
 
+    def get_queryset(self):
+        queryset = super(QuoteList, self).get_queryset()
+
+        author = self.request.GET.get('by', None)
+        mentions = self.request.GET.get('mentioned', None)
+        limit = self.request.GET.get('limit', None)
+
+        # Filter by author.
+        if author is not None:
+            queryset = queryset.filter(author__username__exact = author)
+
+        # Filter by mentioned user.
+        if mentions is not None:
+            # Split mentioned list and remove any empty items.
+            mentions = set(mentions.split(',')) - set([''])
+            queryset = queryset.filter(mentions__username__in = mentions).distinct()
+
+        # Limit number of results.
+        if limit is not None:
+            try:
+                queryset = queryset[:int(limit)]
+            except ValueError:
+                pass
+
+        return queryset
+
 @method_decorator(login_required, name = 'dispatch')
 class QuoteCreate(CreateView):
     model = Quote
