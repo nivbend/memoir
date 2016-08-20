@@ -1,11 +1,12 @@
 from django.utils.encoding import python_2_unicode_compatible
 from django.conf import settings
 from django.db.models import Model, CASCADE
-from django.db.models import OneToOneField
+from django.db.models import OneToOneField, CharField
 
 @python_2_unicode_compatible
 class UserProfile(Model):
     user = OneToOneField(settings.AUTH_USER_MODEL, on_delete = CASCADE, related_name = 'profile')
+    nickname = CharField(max_length = 20, blank = True)
 
     def __str__(self):
         return '%s\'s profile' % (self.user, )

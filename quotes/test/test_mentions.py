@@ -196,3 +196,10 @@ class TestFilters(BaseMentionsTestCase):
 
     def test_escaped_reference(self):
         self.assertEqual(references('\@jerry_s'), '&comat;jerry_s')
+
+    def test_nickname(self):
+        self.george.profile.nickname = 'T-Bone'
+        self.george.profile.save()
+
+        self.assertEqual(speakers('george_c:'), '<a class="speaker" href="/user/george_c">T-Bone</a>:')
+        self.assertEqual(references('@george_c'), '<strong>T-Bone</strong>')

@@ -65,6 +65,8 @@ def _replace_reference(match, escape = lambda c: c):
     return '%s<strong><a class="text-muted" href="%s">%s</a></strong>' % (previous_char, profile_url, escape(_resolve_name(reference)), )
 
 def _resolve_name(user):
+    if user.profile.nickname:
+        return user.profile.nickname
 
     if user.get_short_name():
        return user.get_short_name()

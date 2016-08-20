@@ -4,7 +4,14 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <h1>{{ profile.user.get_full_name|default:profile.user.username }}</h1>
+        {% spaceless %}
+          <h1>
+            {{ profile.user.get_full_name|default:profile.user.username }}
+            {% if profile.nickname %}
+              <small>({{ profile.nickname }})</small>
+            {% endif %}
+          </h1>
+        {% endspaceless %}
       </div>
     </div>
   </div>
