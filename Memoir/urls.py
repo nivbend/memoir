@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.views.generic.base import RedirectView
 
 urlpatterns = [
-    url(r'^$', RedirectView.as_view(pattern_name = 'quote:list'), name = 'index'),
+    url(r'^$', RedirectView.as_view(pattern_name = 'quote:top'), name = 'index'),
     url(r'^admin/', admin.site.urls),
     url(r'^login$', auth_views.login, {'template_name': 'profiles/login.html', }, name = 'login'),
     url(r'^switch_user$', auth_views.logout_then_login, name = 'switch-user'),

@@ -6,6 +6,12 @@
       <a class="navbar-brand" href="{% url 'index' %}">Memoir</a>
     </div>
     <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        {% url 'quote:top' as top_page %}
+        <li class="{% if request.get_full_path == top_page %}active{% endif %}">
+          <a href="{{ top_page }}">Top</a>
+        </li>
+      </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
           <div class="btn-nav">
