@@ -52,3 +52,6 @@ class Quote(Model):
             except get_user_model().DoesNotExist:
                 # TODO: Log warning somewhere.
                 pass
+
+    class Meta:
+        ordering = ('-created', )
