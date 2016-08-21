@@ -1,4 +1,5 @@
 {% load mentions %}
+{% load profiles %}
 
 <div class="row">
   <div class="col-md-12">
@@ -15,7 +16,7 @@
         {% else %}
           <span class="panel-title">{{ quote }}</span>
         {% endif %}
-        <span>(by {{ quote.author }})</span>
+        <span>(by {% profile_link quote.author %})</span>
       </div>
       <div class="panel-body">{{ quote.text|mentions|linebreaksbr }}</div>
       <div class="panel-footer clearfix">

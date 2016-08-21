@@ -5,6 +5,7 @@ from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from profiles.templatetags.profiles import profile_link
 from ..regex import REGEX_SPEAKER, REGEX_REFERENCE
 
 register = Library()
@@ -48,9 +49,7 @@ def _replace_speaker(match, escape = lambda c: c):
     except User.DoesNotExist:
         return match.string[match.start():match.end()]
 
-    profile_url = reverse('user-profile', kwargs = {'username': speaker.username, })
-
-    return '<strong><a class="text-primary" href="%s">%s</a>:</strong>' % (profile_url, escape(_resolve_name(speaker)), )
+    return '<strong>%s:</strong>' % (profile_link(speaker, classes = 'text-primary'), )
 
 def _replace_reference(match, escape = lambda c: c):
     (previous_char, mention, ) = match.groups()
@@ -60,15 +59,6 @@ def _replace_reference(match, escape = lambda c: c):
     except User.DoesNotExist:
         return match.string[match.start():match.end()]
 
-    profile_url = reverse('user-profile', kwargs = {'username': reference.username, })
-
-    return '%s<strong><a class="text-muted" href="%s">%s</a></strong>' % (previous_char, profile_url, escape(_resolve_name(reference)), )
-
-def _resolve_name(user):
-    if user.profile.nickname:
-        return user.profile.nickname
-
-    if user.get_short_name():
-       return user.get_short_name()
-
-    return user.username
+    return '%s<strong>%s</strong>' % (
+        previous_char,
+        profile_link(reference, classes = 'text-muted'), )
