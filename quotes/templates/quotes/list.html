@@ -5,7 +5,7 @@
 {% block content %}
   <div class="container">
     {% for quote in quotes %}
-      {% include "quotes/single_quote.html" with has_title_link=True %}
+      {% include "quotes/single_quote.html" %}
     {% endfor %}
   </div>
 {% endblock %}

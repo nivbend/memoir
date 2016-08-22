@@ -11,10 +11,10 @@
             <a class="btn btn-default" href="{% url 'quote:edit' pk=quote.id %}"><span class="glyphicon glyphicon-pencil"></span></a>
           </div>
         {% endif %}
-        {% if has_title_link %}
-          <span class="panel-title"><a href="{% url 'quote:detail' pk=quote.id %}">{{ quote }}</a></span>
-        {% else %}
+        {% if without_title_link %}
           <span class="panel-title">{{ quote }}</span>
+        {% else %}
+          <span class="panel-title"><a href="{% url 'quote:detail' pk=quote.id %}">{{ quote }}</a></span>
         {% endif %}
         <span>(by {% profile_link quote.author %})</span>
       </div>
