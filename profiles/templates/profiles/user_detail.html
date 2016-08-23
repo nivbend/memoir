@@ -1,5 +1,4 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
+{% extends 'quote_view.html' %}
 
 {% block content %}
 <div class="container">
@@ -40,15 +39,4 @@
     </div>
   </div>
 </div>
-{% endblock %}
-
-{% block stylesheets %}
-  {{ block.super }}
-  <link rel="stylesheet" href="{% static 'memoir/css/vertical_align.css' %}">
-{% endblock %}
-
-{% block scripts %}
-  {{ block.super }}
-  <script type="text/javascript" src="{% static 'memoir/js/csrf.js' %}"></script>
-  <script type="text/javascript" src="{% static 'quotes/js/likes.js' %}"></script>
 {% endblock %}
