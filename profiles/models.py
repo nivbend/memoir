@@ -8,6 +8,14 @@ class UserProfile(Model):
     user = OneToOneField(settings.AUTH_USER_MODEL, on_delete = CASCADE, related_name = 'profile')
     nickname = CharField(max_length = 20, blank = True)
 
+    @property
+    def quotes(self):
+        return self.user.author_of.all()
+
+    @property
+    def mentions(self):
+        return self.user.mentioned_in.all()
+
     def __str__(self):
         return '%s\'s profile' % (self.user, )
 

@@ -1,18 +1,42 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        {% spaceless %}
-          <h1>
-            {{ profile.user.get_full_name|default:profile.user.username }}
-            {% if profile.nickname %}
-              <small>({{ profile.nickname }})</small>
-            {% endif %}
-          </h1>
-        {% endspaceless %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      {% spaceless %}
+        <h1>
+          {{ profile.user.get_full_name|default:profile.user.username }}
+          {% if profile.nickname %}
+            <small>({{ profile.nickname }})</small>
+          {% endif %}
+        </h1>
+      {% endspaceless %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#quotes" aria-controls="quotes" role="tab" data-toggle="tab">Quotes</a></li>
+        <li role="presentation" class=""><a href="#mentions" aria-controls="mentions" role="tab" data-toggle="tab">Mentions</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="quotes">
+          {% for quote in profile.quotes %}
+            {% include "quotes/single_quote.html" %}
+          {% endfor %}
+        </div>
+        <div role="tabpanel" class="tab-pane" id="mentions">
+          {% for quote in profile.mentions %}
+            {% include "quotes/single_quote.html" %}
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
