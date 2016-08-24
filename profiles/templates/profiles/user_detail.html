@@ -27,12 +27,12 @@
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="quotes">
           {% for quote in profile.quotes %}
-            {% include "quotes/single_quote.html" %}
+            {% include "single_quote.html" %}
           {% endfor %}
         </div>
         <div role="tabpanel" class="tab-pane" id="mentions">
           {% for quote in profile.mentions %}
-            {% include "quotes/single_quote.html" %}
+            {% include "single_quote.html" %}
           {% endfor %}
         </div>
       </div>
