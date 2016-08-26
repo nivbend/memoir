@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 from quotes.models import Quote
-from ..templatetags.quotes import speakers, references, mentions
+from ..templatetags.mentions import speakers, references, mentions
 
 class BaseMentionsTestCase(TestCase):
     def setUp(self):
@@ -32,6 +32,8 @@ class BaseMentionsTestCase(TestCase):
             password = 'password',
             first_name = 'Cosmo',
             last_name = 'Kramer')
+        self.kramer.profile.nickname = 'Kramer'
+        self.kramer.profile.save()
 
     def create_quote(self, text):
         return Quote.objects.create(author = self.lerry_david, text = text)
@@ -142,32 +144,31 @@ class TestReferences(BaseMentionsTestCase):
         self.assert_mentions(quote, [self.jerry, ])
 
 class TestFilters(BaseMentionsTestCase):
-    SPEAKER_JERRY = '<a class="speaker" href="/user/jerry_s">Jerry</a>'
-    SPEAKER_GEORGE = '<a class="speaker" href="/user/george_c">George</a>'
-    REFERENCE_JERRY = '<strong>Jerry</strong>'
-    REFERENCE_KRAMER = '<strong>Cosmo</strong>'
-    REFERENCE_ELAINE = '<strong>Elaine</strong>'
+    SPEAKER_JERRY = '<strong><a class="text-primary" href="/user/jerry_s">Jerry</a>:</strong>'
+    SPEAKER_GEORGE = '<strong><a class="text-primary" href="/user/george_c">George</a>:</strong>'
+    REFERENCE_JERRY = '<strong><a class="text-muted" href="/user/jerry_s">Jerry</a></strong>'
+    REFERENCE_KRAMER = '<strong><a class="text-muted" href="/user/kramer">Kramer</a></strong>'
+    REFERENCE_ELAINE = '<strong><a class="text-muted" href="/user/elaine_b">Elaine</a></strong>'
 
     def setUp(self):
         super(TestFilters, self).setUp()
 
-        # Print whole diffs.
         self.maxDiff = None
 
     def test_speakers(self):
         quote = '\n'.join([
             'george_c: You\'ve got to apologize.',
-        'jerry_s: Why?',
-        'george_c: Because it\'s the mature and adult thing to do.',
-        'jerry_s: How does that affect me?',
+            'jerry_s: Why?',
+            'george_c: Because it\'s the mature and adult thing to do.',
+            'jerry_s: How does that affect me?',
         ])
 
-    expected_output = '\n'.join([
-            '%s: You\'ve got to apologize.' % (self.SPEAKER_GEORGE, ),
-        '%s: Why?' % (self.SPEAKER_JERRY, ),
-        '%s: Because it\'s the mature and adult thing to do.' % (self.SPEAKER_GEORGE, ),
-        '%s: How does that affect me?' % (self.SPEAKER_JERRY, ),
-    ])
+        expected_output = '\n'.join([
+            '%s You\'ve got to apologize.' % (self.SPEAKER_GEORGE, ),
+            '%s Why?' % (self.SPEAKER_JERRY, ),
+            '%s Because it\'s the mature and adult thing to do.' % (self.SPEAKER_GEORGE, ),
+            '%s How does that affect me?' % (self.SPEAKER_JERRY, ),
+        ])
 
         self.assertMultiLineEqual(speakers(quote), expected_output)
 
@@ -191,7 +192,7 @@ class TestFilters(BaseMentionsTestCase):
     def test_mentions(self):
         self.assertMultiLineEqual(
             mentions('george_c: @jerry_s, just remember, it\'s not a lie if you believe it.'),
-            '%s: %s, just remember, it\'s not a lie if you believe it.'
+            '%s %s, just remember, it\'s not a lie if you believe it.'
                 % (self.SPEAKER_GEORGE, self.REFERENCE_JERRY, ))
 
     def test_escaped_reference(self):
@@ -201,5 +202,5 @@ class TestFilters(BaseMentionsTestCase):
         self.george.profile.nickname = 'T-Bone'
         self.george.profile.save()
 
-        self.assertEqual(speakers('george_c:'), '<a class="speaker" href="/user/george_c">T-Bone</a>:')
-        self.assertEqual(references('@george_c'), '<strong>T-Bone</strong>')
+        self.assertEqual(speakers('george_c:'), '<strong><a class="text-primary" href="/user/george_c">T-Bone</a>:</strong>')
+        self.assertEqual(references('@george_c'), '<strong><a class="text-muted" href="/user/george_c">T-Bone</a></strong>')
