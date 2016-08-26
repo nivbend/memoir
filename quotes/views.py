@@ -2,9 +2,10 @@ from httplib import FORBIDDEN
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 from django.db.models import Count
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import View, TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponse, JsonResponse
 from .models import Quote
 
@@ -71,6 +72,10 @@ class TopQuotes(QuoteList):
         return queryset.order_by('-likers_count', '-created')
 
 class LikeView(View):
+    def get(self, request, pk):
+        quote = get_object_or_404(Quote, pk = pk)
+        return JsonResponse({'likers': map(str, quote.likers.all()), })
+
     def put(self, request, pk):
         if self.request.user.pk is None:
             return HttpResponse(status = FORBIDDEN)
@@ -86,3 +91,19 @@ class LikeView(View):
         quote = get_object_or_404(Quote, pk = pk)
         quote.likers.remove(self.request.user)
         return JsonResponse({'likers': map(str, quote.likers.all()), })
+
+class LikersList(TemplateView):
+    template_name = 'quotes/likers.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(LikersList, self).get_context_data(**kwargs)
+        likers = self.request.GET.getlist('likers[]')
+        likers = get_user_model().objects.filter(username__in = likers)
+
+        if self.request.user in likers:
+            context['liked_by_user'] = True
+            context['likers'] = likers.exclude(id = self.request.user.id)
+        else:
+            context['likers'] = likers
+
+        return context

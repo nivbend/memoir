@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from ..templatetags.profiles import profile_link
+from ..templatetags.profiles import profile_link, listify
 
 class TestLink(TestCase):
     def setUp(self):
@@ -46,3 +46,16 @@ class TestLink(TestCase):
     def assert_link(self, name):
         expected = '<a class="" href="/user/%s">%s</a>' % (self.bob.username, name, )
         self.assertEqual(profile_link(self.bob), expected)
+
+class TestListify(TestCase):
+    def test_empty_list(self):
+        self.assertEqual(listify([]), '')
+
+    def test_one_item(self):
+        self.assertEqual(listify(['one', ]), 'one')
+
+    def test_two_item(self):
+        self.assertEqual(listify(['one', 'two', ]), 'one and two')
+
+    def test_multiple_items(self):
+        self.assertEqual(listify(['one', 'two', 'three', 'four', ]), 'one, two, three and four')

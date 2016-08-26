@@ -5,5 +5,44 @@
 {% block content %}
   <div class="container">
     {% include "single_quote.html" with with_link=False %}
+    <div class="row">
+      <div class="col-md-12">
+        <p class="alert alert-info hidden" id="likes_list"><strong>Likes:</strong> <span id="likers"></span></p>
+      </div>
+    </div>
   </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script type="text/javascript">
+    function updateLikes(likers) {
+      if (likers.length) {
+        $.get({
+          url: "{% url 'quote:likers' pk=quote.pk %}",
+          data: {"likers": likers },
+          success: function(response) {
+            $("#likes_list > #likers").html(response);
+            $("#likes_list").removeClass("hidden");
+          }});
+      }
+      else {
+        $("#likes_list").addClass("hidden");
+      }
+    }
+
+    $(function () {
+      $.get({
+        "url": "{% url 'quote:like' pk=quote.pk %}",
+        success: function(response) {
+          updateLikes(response.likers);
+        }});
+    });
+
+    $(document).ready(function() {
+      $("button.btn-like, button.btn-unlike").bind(
+        "likes_updated",
+        function(event, likers) { updateLikes(likers); });
+    });
+  </script>
 {% endblock %}

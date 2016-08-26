@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.template import Library
 
@@ -13,6 +14,25 @@ def profile_link(user, classes = '', escape = lambda c: c):
         escape(_resolve_name(user)),
         '</a>',
     ]))
+
+@register.filter(needs_autoescape = True)
+def profiles(users, autoescape = True):
+    if autoescape:
+        escape = conditional_escape
+    else:
+        escape = lambda c: c
+
+    return [profile_link(user, escape = escape) for user in users]
+
+@register.filter(is_safe = True)
+def listify(items):
+    if not items:
+        return mark_safe('')
+
+    if 1 == len(items):
+        return items[0]
+
+    return mark_safe(', '.join(items[:-1]) + ' and ' + items[-1])
 
 def _resolve_name(user):
     if user.profile.nickname:
