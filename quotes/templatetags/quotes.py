@@ -26,10 +26,6 @@ def quote_title(context):
         'detail_url': detail_url,
     }
 
-@register.inclusion_tag('quotes/quote/author.html', takes_context = True)
-def quote_author(context):
-    return {'author': context['quote'].author.username, }
-
 @register.inclusion_tag('quotes/quote/body.html', takes_context = True)
 def quote_body(context):
     return {'quote_text': context['quote'].text, }
