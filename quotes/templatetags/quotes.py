@@ -38,3 +38,13 @@ def delete_modal(context):
         'delete_modal_id': 'delete_modal_%d' % (quote.id, ),
         'delete_url': reverse('quote:delete', kwargs = {'pk': quote.pk, }),
     }
+
+@register.inclusion_tag('quotes/quote/comments.html', takes_context = True)
+def comments(context):
+    quote = context['quote']
+
+    return {
+        'quote_pk': quote.pk,
+        'comments': quote.comments.all(),
+        'user': context['user'],
+    }

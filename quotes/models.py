@@ -60,3 +60,10 @@ class Quote(Model):
 
     class Meta:
         ordering = ('-created', )
+
+class Comment(Model):
+    created = DateTimeField(auto_now_add = True)
+    last_modified = DateTimeField(auto_now = True)
+    author = ForeignKey(settings.AUTH_USER_MODEL, related_name = 'comments')
+    quote = ForeignKey(Quote, related_name = 'comments')
+    text = TextField()

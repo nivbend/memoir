@@ -1,13 +1,14 @@
-from httplib import FORBIDDEN
-from django.shortcuts import get_object_or_404
-from django.core.urlresolvers import reverse_lazy
+from httplib import NO_CONTENT
+from django.shortcuts import get_object_or_404, redirect
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Count
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.http import HttpResponse, JsonResponse
-from .models import Quote
+from django.http import HttpResponse, JsonResponse, Http404, QueryDict
+from django.http import HttpResponseForbidden
+from .models import Quote, Comment
 
 class QuoteList(ListView):
     model = Quote
@@ -78,7 +79,7 @@ class LikeView(View):
 
     def put(self, request, pk):
         if self.request.user.pk is None:
-            return HttpResponse(status = FORBIDDEN)
+            return HttpResponseForbidden()
 
         quote = get_object_or_404(Quote, pk = pk)
         quote.likers.add(self.request.user)
@@ -86,7 +87,7 @@ class LikeView(View):
 
     def delete(self, request, pk):
         if self.request.user.pk is None:
-            return HttpResponse(status = FORBIDDEN)
+            return HttpResponseForbidden()
 
         quote = get_object_or_404(Quote, pk = pk)
         quote.likers.remove(self.request.user)
@@ -107,3 +108,37 @@ class LikersList(TemplateView):
             context['likers'] = likers
 
         return context
+
+@method_decorator(login_required, name = 'dispatch')
+class Comments(View):
+    def post(self, request, pk):
+        quote = get_object_or_404(Quote, pk = pk)
+        comment = quote.comments.create(
+            author = self.request.user,
+            text = self.request.POST['text'])
+
+        return JsonResponse({'comment_pk': comment.pk, })
+
+    def put(self, request, pk, comment_pk):
+        comment = _get_comment_or_404(pk, comment_pk)
+
+        comment.text = QueryDict(request.body)['text']
+        comment.save()
+
+        return HttpResponse(status = NO_CONTENT)
+
+    def delete(self, request, pk, comment_pk):
+        comment = _get_comment_or_404(pk, comment_pk)
+
+        comment.delete()
+
+        return HttpResponse(status = NO_CONTENT)
+
+def _get_comment_or_404(quote_pk, comment_pk):
+    quote = get_object_or_404(Quote, pk = quote_pk)
+    comment = quote.comments.filter(pk = comment_pk)
+
+    if not comment.exists():
+        raise Http404()
+
+    return comment.get()

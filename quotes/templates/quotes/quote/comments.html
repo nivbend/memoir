@@ -1,0 +1,107 @@
+{% load profiles %}
+{% load mentions %}
+
+<div class="panel panel-default {% if not comments %}hidden{% endif %}">
+  <table class="table table-bordered table-condensed">
+    {% for comment in comments %}
+      {% url 'quote:comment' pk=quote_pk comment_pk=comment.pk as comment_url%}
+      <tr>
+        <td id="comment_{{ comment.pk }}">
+          <div class="" id="comment_{{ comment.pk }}_detail">
+            <small>
+              <strong>{% profile_link comment.author %}</strong>
+              <span>{{ comment.text|references|linebreaksbr }}</span><br/>
+              {% if user == comment.author %}
+                <a href="#" data-pk="{{ comment.pk }}" data-display="true" onClick="javascript:showEditForm(event, $(this));">Edit</a>
+                <a href="#" data-url="{{ comment_url }}" data-method="DELETE" onClick="javascript:deleteComment(event, $(this));">Delete</a>
+              {% endif %}
+              <span class="text-muted">{{ comment.created|timesince }} ago</span>
+            </small>
+          </div>
+          <div class="hidden" id="comment_{{ comment.pk }}_edit">
+            <div class="row">
+              <div class="col-md-12">
+                <textarea class="form-control" id="comment_{{ comment.pk }}_text" name="text" placeholder="Say something">{{ comment.text }}</textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="btn-group pull-right" role="group">
+                  <a class="btn btn-default" href="#" data-pk="{{ comment.pk }}" data-display="false" onClick="javascript:showEditForm(event, $(this));">Cancel</a>
+                  <a class="btn btn-primary" href="#" data-pk="{{ comment.pk }}" data-url="{{ comment_url }}" data-method="PUT" onClick="javascript:editComment(event, $(this));">Edit</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+
+<script type="text/javascript">
+  function showEditForm(event, link) {
+    event.preventDefault();
+
+    var comment_pk = link.data("pk");
+
+    if (link.data("display")) {
+      $("#comment_" + comment_pk + "_detail").addClass("hidden");
+      $("#comment_" + comment_pk + "_edit").removeClass("hidden");
+    }
+    else {
+      $("#comment_" + comment_pk + "_detail").removeClass("hidden");
+      $("#comment_" + comment_pk + "_edit").addClass("hidden");
+    }
+  }
+
+  function editComment(event, link) {
+    event.preventDefault();
+
+    var comment_pk = link.data("pk");
+
+    $.ajax({
+      url: link.data("url"),
+      type: link.data("method"),
+      data: {
+        text: $("#comment_" + comment_pk + "_text").val()
+      },
+      success: function(response) {
+        $("#comment_" + comment_pk + "_detail").removeClass("hidden");
+        $("#comment_" + comment_pk + "_edit").addClass("hidden");
+
+        location.hash = "#comment_" + comment_pk;
+        location.reload();
+      },
+      error: function(response) {
+        if (403 == response.status) {
+          alert("Must be logged in");
+          return;
+        }
+      }
+    });
+  }
+
+  function deleteComment(event, link) {
+    event.preventDefault();
+
+    if (!confirm("Delete comment?")) {
+      return;
+    }
+
+    $.ajax({
+      url: link.data("url"),
+      type: link.data("method"),
+      success: function(response) {
+        // Reload at top of page.
+        location.hash = "";
+        location.reload();
+      },
+      error: function(response) {
+        if (403 == response.status) {
+          alert("Must be logged in");
+        }
+      }
+    });
+  }
+</script>
