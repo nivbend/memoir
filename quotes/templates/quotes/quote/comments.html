@@ -74,6 +74,11 @@
         location.reload();
       },
       error: function(response) {
+        if (400 == response.status) {
+          alert("Comment must have content");
+          $("#comment_" + comment_pk + "_text").focus();
+          return;
+        }
         if (403 == response.status) {
           alert("Must be logged in");
           return;

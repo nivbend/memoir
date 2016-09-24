@@ -27,6 +27,22 @@ class TestComments(TestCase):
         self._add_comment('YAY')
         self._add_comment('\n'.join(['One line', 'Two lines', ]))
 
+    def test_create_reject_if_empty(self):
+        with self.assertRaises(FailedAction):
+            self._add_comment('')
+
+        with self.assertRaises(FailedAction):
+            self._add_comment('    ')
+
+        with self.assertRaises(FailedAction):
+            self._add_comment('\n')
+
+        with self.assertRaises(FailedAction):
+            self._add_comment('\n    \n\n   \n    ')
+
+        with self.assertRaises(FailedAction):
+            self._add_comment('   \n    \n')
+
     def test_edit(self):
         comment = self._add_comment('Original')
         self._edit_comment(comment.pk, 'Modified')
@@ -36,6 +52,24 @@ class TestComments(TestCase):
             self._edit_comment(1337, 'This should fail')
 
         self.assertEqual(cm.exception.response.status_code, NOT_FOUND)
+
+    def test_edit_reject_if_empty(self):
+        comment = self._add_comment('Original')
+
+        with self.assertRaises(FailedAction):
+            self._edit_comment(comment.pk, '')
+
+        with self.assertRaises(FailedAction):
+            self._edit_comment(comment.pk, '    ')
+
+        with self.assertRaises(FailedAction):
+            self._edit_comment(comment.pk, '\n')
+
+        with self.assertRaises(FailedAction):
+            self._edit_comment(comment.pk, '\n    \n\n   \n    ')
+
+        with self.assertRaises(FailedAction):
+            self._edit_comment(comment.pk, '   \n    \n')
 
     def test_delete(self):
         comment = self._add_comment('Original')

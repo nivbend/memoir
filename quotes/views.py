@@ -1,4 +1,5 @@
 from httplib import NO_CONTENT
+from httplib import NO_CONTENT, BAD_REQUEST
 from django.shortcuts import get_object_or_404, redirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Count
@@ -112,17 +113,30 @@ class LikersList(TemplateView):
 @method_decorator(login_required, name = 'dispatch')
 class Comments(View):
     def post(self, request, pk):
+        comment_text = self.request.POST['text']
+
+        # It's worth noting we check the stripped version, but save the text as
+        # it was given.
+        if not comment_text.strip():
+            return HttpResponse(status = BAD_REQUEST)
+
         quote = get_object_or_404(Quote, pk = pk)
         comment = quote.comments.create(
             author = self.request.user,
-            text = self.request.POST['text'])
+            text = comment_text)
 
         return JsonResponse({'comment_pk': comment.pk, })
 
     def put(self, request, pk, comment_pk):
         comment = _get_comment_or_404(pk, comment_pk)
+        comment_text = QueryDict(request.body)['text']
 
-        comment.text = QueryDict(request.body)['text']
+        # It's worth noting we check the stripped version, but save the text as
+        # it was given.
+        if not comment_text.strip():
+            return HttpResponse(status = BAD_REQUEST)
+
+        comment.text = comment_text
         comment.save()
 
         return HttpResponse(status = NO_CONTENT)
