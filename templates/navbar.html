@@ -21,7 +21,7 @@
         <li>
           <div class="navbar-text">
             {% if user.is_authenticated %}
-              <span>Logged in as {% profile_link user classes="navbar-link" %}</span>
+              <span>Logged in as <strong>{% profile_link user classes="navbar-link" %}</strong></span>
               <span>(<a class="navbar-link" href="{% url 'switch-user' %}">switch</a>)</span>
             {% else %}
               <a class="navbar-link" href="{% url 'login' %}">Login</a>
