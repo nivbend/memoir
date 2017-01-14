@@ -63,7 +63,7 @@ class Quote(Model):
         self.mentions.clear()
 
         # Mark speakers as mentioned.
-        for speaker in REGEX_SPEAKER.findall(self.text):
+        for (speaker, _) in REGEX_SPEAKER.findall(self.text):
             try:
                 self.mentions.add(get_user_model().objects.get(username = speaker))
             except get_user_model().DoesNotExist:
@@ -71,7 +71,7 @@ class Quote(Model):
                 pass
 
         # Mark referenced users as mentioned.
-        for (_, reference) in REGEX_REFERENCE.findall(self.text):
+        for (_, reference, _) in REGEX_REFERENCE.findall(self.text):
             try:
                 self.mentions.add(get_user_model().objects.get(username = reference))
             except get_user_model().DoesNotExist:

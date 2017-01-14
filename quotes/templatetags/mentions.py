@@ -43,16 +43,19 @@ def references(text, autoescape = True):
     return mark_safe(text)
 
 def _replace_speaker(match, escape = lambda c: c):
-    (mention, ) = match.groups()
+    (mention, nickname, ) = match.groups()
+    nickname = _fix_nickname(nickname)
+
     try:
         speaker = User.objects.get(username = mention)
     except User.DoesNotExist:
         return match.string[match.start():match.end()]
 
-    return '<strong>%s:</strong>' % (profile_link(speaker, classes = 'text-primary'), )
+    return '<strong>%s:</strong>' % (profile_link(speaker, force_nickname = nickname, classes = 'text-primary'), )
 
 def _replace_reference(match, escape = lambda c: c):
-    (previous_char, mention, ) = match.groups()
+    (previous_char, mention, nickname, ) = match.groups()
+    nickname = _fix_nickname(nickname)
 
     try:
         reference = User.objects.get(username = mention)
@@ -61,4 +64,15 @@ def _replace_reference(match, escape = lambda c: c):
 
     return '%s<strong>%s</strong>' % (
         previous_char,
-        profile_link(reference, classes = 'text-muted'), )
+        profile_link(reference, force_nickname = nickname, classes = 'text-muted'), )
+
+def _fix_nickname(nickname):
+    if not nickname:
+        return None
+
+    if nickname.startswith('"'):
+        nickname = nickname[1:]
+    if nickname.endswith('"'):
+        nickname = nickname[:-1]
+
+    return nickname

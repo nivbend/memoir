@@ -16,6 +16,15 @@ class UserProfile(Model):
     def mentions(self):
         return self.user.mentioned_in.all()
 
+    def get_name(self):
+        if self.nickname:
+            return self.nickname
+
+        if self.user.get_short_name():
+            return self.user.get_short_name()
+
+        return self.user.username
+
     def __str__(self):
         return '%s\'s profile' % (self.user, )
 

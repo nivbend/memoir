@@ -6,12 +6,12 @@ from django.template import Library
 register = Library()
 
 @register.simple_tag
-def profile_link(user, classes = '', escape = lambda c: c):
+def profile_link(user, force_nickname = None, classes = '', escape = lambda c: c):
     profile_url = reverse('user-profile', kwargs = {'username': user.username, })
 
     return mark_safe(''.join([
         '<a class="%s" href="%s">' % (escape(classes), profile_url, ),
-        escape(_resolve_name(user)),
+        escape(force_nickname if force_nickname else user.profile.get_name()),
         '</a>',
     ]))
 
@@ -33,12 +33,3 @@ def listify(items):
         return items[0]
 
     return mark_safe(', '.join(items[:-1]) + ' and ' + items[-1])
-
-def _resolve_name(user):
-    if user.profile.nickname:
-        return user.profile.nickname
-
-    if user.get_short_name():
-       return user.get_short_name()
-
-    return user.username
