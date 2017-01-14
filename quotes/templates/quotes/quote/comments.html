@@ -11,7 +11,7 @@
             <small>
               <strong>{% profile_link comment.author %}</strong>
               <span>{{ comment.text|references|linebreaksbr }}</span><br/>
-              {% if user == comment.author %}
+              {% if user == comment.author or user.is_superuser %}
                 <a href="#" data-pk="{{ comment.pk }}" data-display="true" onClick="javascript:showEditForm(event, $(this));">Edit</a>
                 <a href="#" data-url="{{ comment_url }}" data-method="DELETE" onClick="javascript:deleteComment(event, $(this));">Delete</a>
               {% endif %}
