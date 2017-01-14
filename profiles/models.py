@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.conf import settings
 from django.db.models import Model, CASCADE
@@ -24,6 +25,9 @@ class UserProfile(Model):
             return self.user.get_short_name()
 
         return self.user.username
+
+    def get_absolute_url(self):
+        return reverse('user-profile', kwargs = {'username': self.user.username, })
 
     def __str__(self):
         return '%s\'s profile' % (self.user, )

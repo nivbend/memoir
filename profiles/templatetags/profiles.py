@@ -1,4 +1,3 @@
-from django.core.urlresolvers import reverse
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.template import Library
@@ -6,11 +5,17 @@ from django.template import Library
 register = Library()
 
 @register.simple_tag
-def profile_link(user, force_nickname = None, classes = '', escape = lambda c: c):
-    profile_url = reverse('user-profile', kwargs = {'username': user.username, })
+def profile_link(user, force_nickname = None, classes = None, escape = lambda c: c):
+    if not classes:
+        classes = ''
+
+    attributes = [
+        ('class', escape(classes)),
+        ('href', user.profile.get_absolute_url()),
+    ]
 
     return mark_safe(''.join([
-        '<a class="%s" href="%s">' % (escape(classes), profile_url, ),
+        '<a %s>' % (' '.join('%s="%s"' % (attribute, value, ) for (attribute, value) in attributes), ),
         escape(force_nickname if force_nickname else user.profile.get_name()),
         '</a>',
     ]))
