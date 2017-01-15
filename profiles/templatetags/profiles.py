@@ -15,7 +15,7 @@ def profile_link(user, force_nickname = None, classes = None, escape = lambda c:
     ]
 
     return mark_safe(''.join([
-        '<a %s>' % (' '.join('%s="%s"' % (attribute, value, ) for (attribute, value) in attributes), ),
+        '<a %s>' % (_build_tag_attributes(attributes), ),
         escape(force_nickname if force_nickname else user.profile.get_name()),
         '</a>',
     ]))
@@ -38,3 +38,6 @@ def listify(items):
         return items[0]
 
     return mark_safe(', '.join(items[:-1]) + ' and ' + items[-1])
+
+def _build_tag_attributes(attributes):
+    return ' '.join('%s="%s"' % (attribute, value, ) for (attribute, value) in attributes)

@@ -1,7 +1,7 @@
-from httplib import NO_CONTENT
+from __future__ import unicode_literals
 from httplib import NO_CONTENT, BAD_REQUEST
-from django.shortcuts import get_object_or_404, redirect
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.shortcuts import get_object_or_404
+from django.core.urlresolvers import reverse_lazy
 from django.db.models import Count
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required

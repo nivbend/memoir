@@ -3,7 +3,6 @@ from django.template import Library
 from django.template.defaultfilters import stringfilter
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
-from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from profiles.templatetags.profiles import profile_link
 from ..regex import REGEX_SPEAKER, REGEX_REFERENCE
@@ -25,7 +24,11 @@ def speakers(text, autoescape = True):
     else:
         escape = lambda c: c
 
-    return mark_safe(REGEX_SPEAKER.sub(partial(_replace_speaker, escape = escape), text))
+    text = REGEX_SPEAKER.sub(
+        partial(_replace_speaker, escape = escape),
+        text)
+
+    return mark_safe(text)
 
 @register.filter(needs_autoescape = True)
 @stringfilter
@@ -38,7 +41,9 @@ def references(text, autoescape = True):
     # Replace escaped references with the @ entity.
     text = text.replace('\\@', '&comat;')
 
-    text = REGEX_REFERENCE.sub(partial(_replace_reference, escape = escape), text)
+    text = REGEX_REFERENCE.sub(
+        partial(_replace_reference, escape = escape),
+        text)
 
     return mark_safe(text)
 
@@ -51,7 +56,12 @@ def _replace_speaker(match, escape = lambda c: c):
     except User.DoesNotExist:
         return match.string[match.start():match.end()]
 
-    return '<strong>%s:</strong>' % (profile_link(speaker, force_nickname = nickname, classes = 'text-primary'), )
+    link = profile_link(
+        speaker,
+        force_nickname = nickname,
+        classes = 'text-primary')
+
+    return '<strong>%s:</strong>' % (link, )
 
 def _replace_reference(match, escape = lambda c: c):
     (previous_char, mention, nickname, ) = match.groups()
@@ -62,9 +72,12 @@ def _replace_reference(match, escape = lambda c: c):
     except User.DoesNotExist:
         return match.string[match.start():match.end()]
 
-    return '%s<strong>%s</strong>' % (
-        previous_char,
-        profile_link(reference, force_nickname = nickname, classes = 'text-muted'), )
+    link = profile_link(
+        reference,
+        force_nickname = nickname,
+        classes = 'text-muted')
+
+    return '%s<strong>%s</strong>' % (previous_char, link , )
 
 def _fix_nickname(nickname):
     if not nickname:

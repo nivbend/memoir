@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
-from django.db.models import Model, SET_NULL
+from django.db.models import Model
 from django.db.models import DateTimeField, ForeignKey, CharField, TextField, ManyToManyField
 from .regex import REGEX_SPEAKER, REGEX_REFERENCE
 

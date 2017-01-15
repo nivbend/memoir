@@ -1,11 +1,13 @@
 {% load profiles %}
 
+{% with likers_list=likers|profiles|listify %}
 {% if not liked_by_user %}
   {{ likers|profiles|listify }}
 {% elif likers|length_is:"1" %}
-  You and {{ likers|profiles|listify }}
+  You and {{ likers_list }}
 {% elif 0 < likers|length %}
-  You, {{ likers|profiles|listify }}
+  You, {{ likers_list }}
 {% else %}
   You
 {% endif %}
+{% endwith %}
