@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from django.utils.translation import ugettext as _
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.template import Library
@@ -38,7 +39,7 @@ def listify(items):
     if 1 == len(items):
         return items[0]
 
-    return mark_safe(', '.join(items[:-1]) + ' and ' + items[-1])
+    return mark_safe(', '.join(items[:-1]) + _(' and ') + items[-1])
 
 def _build_tag_attributes(attributes):
     return ' '.join('%s="%s"' % (attribute, value, ) for (attribute, value) in attributes)

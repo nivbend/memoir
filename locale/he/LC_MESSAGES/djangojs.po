@@ -1,0 +1,34 @@
+# Hebrew translation for Memoir.
+# Copyright (C) 2017
+# This file is distributed under the same license as the Memoir package.
+# Niv Ben-David <nivbend@gmail.com>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-20 23:29+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Niv Ben-David <nivbend@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: quotes/static/quotes/js/comments.js:33
+#: quotes/static/quotes/js/comments.js:65
+msgid "Comment must have content"
+msgstr "ההערה ריקה"
+
+#: quotes/static/quotes/js/comments.js:38
+#: quotes/static/quotes/js/comments.js:70
+#: quotes/static/quotes/js/comments.js:94 quotes/static/quotes/js/likes.js:30
+msgid "Must be logged in"
+msgstr "אין יכולת להמשיך ללא הזדהות"
+
+#: quotes/static/quotes/js/comments.js:80
+msgid "Delete comment?"
+msgstr "למחוק את ההערה?"

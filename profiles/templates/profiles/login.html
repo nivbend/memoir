@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+
+{% load i18n %}
 {% load bootstrap %}
 
 {% block title %}Login{% endblock %}
@@ -16,7 +18,7 @@
           </div>
           <div class="row">
             <div class="col-md-2 col-md-offset-10">
-              <button class="btn btn-default pull-right flip" type="submit">Login</button>
+              <button class="btn btn-default pull-right flip" type="submit">{% trans "Login" %}</button>
               <input type="hidden" name="next" value="{{ next }}"/>
             </div>
           </div>

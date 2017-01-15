@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <div class="modal fade" id="{{ delete_modal_id }}" tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -9,14 +11,14 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <div class="col-md-12">Are you certain you want to delete the quote?</div>
+            <div class="col-md-12">{% trans "Are you certain you want to delete the quote?" %}</div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
         <form class="form" method="POST" action="{{ delete_url }}">
           {% csrf_token %}
-          <input class="btn btn-danger" type="submit" value="I'm sure"\>
+          <input class="btn btn-danger" type="submit" value="{% trans "I'm sure" %}"\>
         </form>
       </div>
     </div>

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 from __future__ import unicode_literals
 from os.path import dirname, abspath, join
+from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse_lazy
 
 # Build paths inside the project like this: join(BASE_DIR, ...)
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -72,6 +74,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
             ],
         },
     },
@@ -122,6 +125,15 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+LANGUAGES = (
+    ('en', _('English')),
+    ('he', _('Hebrew')),
+)
+
+LOCALE_PATHS = (
+    join(BASE_DIR, 'locale'),
+)
 
 
 # Static files (CSS, JavaScript, Images)

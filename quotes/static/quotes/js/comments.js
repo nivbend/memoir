@@ -30,12 +30,12 @@ function addComment(event) {
     },
     error: function (response) {
       if (400 == response.status) {
-        alert("Comment must have content");
+        alert(gettext("Comment must have content"));
         $(text_source).focus();
         return;
       }
       if (403 == response.status) {
-        alert("Must be logged in");
+        alert(gettext("Must be logged in"));
         return;
       }
     }
@@ -62,12 +62,12 @@ function editComment(event, link) {
     },
     error: function(response) {
       if (400 == response.status) {
-        alert("Comment must have content");
+        alert(gettext("Comment must have content"));
         $("#comment_" + comment_pk + "_text").focus();
         return;
       }
       if (403 == response.status) {
-        alert("Must be logged in");
+        alert(gettext("Must be logged in"));
         return;
       }
     }
@@ -77,7 +77,7 @@ function editComment(event, link) {
 function deleteComment(event, link) {
   event.preventDefault();
 
-  if (!confirm("Delete comment?")) {
+  if (!confirm(gettext("Delete comment?"))) {
     return;
   }
 
@@ -91,7 +91,7 @@ function deleteComment(event, link) {
     },
     error: function(response) {
       if (403 == response.status) {
-        alert("Must be logged in");
+        alert(gettext("Must be logged in"));
       }
     }
   });

@@ -1,5 +1,7 @@
 {% extends 'quote_view.html' %}
 
+{% load i18n %}
+
 {% block content %}
 <div class="container">
   <div class="row">
@@ -17,8 +19,8 @@
   <div class="row">
     <div class="col-md-12">
       <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#quotes" aria-controls="quotes" role="tab" data-toggle="tab">Quotes</a></li>
-        <li role="presentation" class=""><a href="#mentions" aria-controls="mentions" role="tab" data-toggle="tab">Mentions</a></li>
+        <li role="presentation" class="active"><a href="#quotes" aria-controls="quotes" role="tab" data-toggle="tab">{% trans "Quotes" %}</a></li>
+        <li role="presentation" class=""><a href="#mentions" aria-controls="mentions" role="tab" data-toggle="tab">{% trans "Mentions" %}</a></li>
       </ul>
     </div>
   </div>

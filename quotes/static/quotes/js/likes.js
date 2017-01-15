@@ -27,7 +27,7 @@ function toggleLike(event) {
         success: toggle,
         error: function(response) {
             if (403 == response.status) {
-                alert("Must be logged in");
+                alert(gettext("Must be logged in"));
             }
         },
     });

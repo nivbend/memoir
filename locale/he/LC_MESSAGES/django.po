@@ -1,0 +1,138 @@
+# Hebrew translation for Memoir.
+# Copyright (C) 2017
+# This file is distributed under the same license as the Memoir package.
+# Niv Ben-David <nivbend@gmail.com>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-20 23:29+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Niv Ben-David <nivbend@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: Memoir/settings.py:130
+msgid "English"
+msgstr "אנגלית"
+
+#: Memoir/settings.py:131
+msgid "Hebrew"
+msgstr "עברית"
+
+#: profiles/templates/profiles/login.html:21 templates/navbar.html:32
+msgid "Login"
+msgstr "התחבר"
+
+#: profiles/templates/profiles/user_detail.html:22
+msgid "Quotes"
+msgstr "ציטוטים"
+
+#: profiles/templates/profiles/user_detail.html:23
+msgid "Mentions"
+msgstr "איזכורים"
+
+#: profiles/templatetags/profiles.py:42
+msgid " and "
+msgstr " ו"
+
+#: quotes/templates/quotes/create.html:6
+msgid "Add Quote"
+msgstr "שלח ציטוט"
+
+#: quotes/templates/quotes/create.html:19 templates/navbar.html:19
+msgid "Create"
+msgstr "צטט"
+
+#: quotes/templates/quotes/detail.html:13
+msgid "Likes:"
+msgstr "אהבו:"
+
+#: quotes/templates/quotes/detail.html:22
+#: quotes/templates/quotes/quote/comments.html:24
+msgid "What do you have to say?"
+msgstr "מה יש לך להגיד?"
+
+#: quotes/templates/quotes/detail.html:24
+msgid "Comment"
+msgstr "שלח"
+
+#: quotes/templates/quotes/edit.html:20
+#: quotes/templates/quotes/quote/comments.html:30
+msgid "Cancel"
+msgstr "בטל"
+
+#: quotes/templates/quotes/edit.html:23
+msgid "Update"
+msgstr "ערוך"
+
+#: quotes/templates/quotes/likers.html:8
+msgid "You and "
+msgstr "את/ה ו"
+
+#: quotes/templates/quotes/likers.html:10
+msgid "You, "
+msgstr "את/ה, "
+
+#: quotes/templates/quotes/likers.html:12
+msgid "You"
+msgstr "את/ה"
+
+#: quotes/templates/quotes/quote/comments.html:15
+#: quotes/templates/quotes/quote/comments.html:31
+msgid "Edit"
+msgstr "ערוך"
+
+#: quotes/templates/quotes/quote/comments.html:16
+msgid "Delete"
+msgstr "מחק"
+
+#: quotes/templates/quotes/quote/comments.html:18
+#, python-format
+msgid "%(t)s ago"
+msgstr "לפני %(t)s"
+
+#: quotes/templates/quotes/quote/delete_modal.html:14
+msgid "Are you certain you want to delete the quote?"
+msgstr "האם את/ה בטוח/ה שאת/ה רוצה למחוק את הציטוט?"
+
+#: quotes/templates/quotes/quote/delete_modal.html:21
+msgid "I'm sure"
+msgstr "אני בטוח/ה"
+
+#: templates/navbar.html:13
+msgid "Top"
+msgstr "נבחרים"
+
+#: templates/navbar.html:26
+msgid "Logged in as "
+msgstr "מחובר/ת כ"
+
+#: templates/navbar.html:29
+msgid "switch"
+msgstr "החלף משתמש"
+
+#: templates/single_quote.html:6
+#, python-format
+msgid ""
+"\n"
+"%(counter)s comment\n"
+msgid_plural ""
+"\n"
+"%(counter)s comments\n"
+msgstr[0] ""
+"\n"
+"הערה אחת\n"
+msgstr[1] ""
+"\n"
+"%(counter)s הערות\n"
+
+#: templates/single_quote.html:26
+msgid "By "
+msgstr "ע\"י "

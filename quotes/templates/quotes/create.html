@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
+
+{% load i18n %}
 {% load bootstrap %}
 
-{% block title %}Add Quote{% endblock %}
+{% block title %}{% trans "Add Quote" %}{% endblock %}
 
 {% block content %}
   <div class="container">
@@ -14,7 +16,7 @@
       </div>
       <div class="row form-group">
         <div class="col-md-2 col-md-offset-10">
-          <button class="btn btn-default pull-right flip" type="submit">Create</button>
+          <button class="btn btn-default pull-right flip" type="submit">{% trans "Create" %}</button>
         </div>
       </div>
     </form>

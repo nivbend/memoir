@@ -19,12 +19,16 @@ from django.conf.urls import url, include
 from django.contrib.auth import views as auth_views
 from django.contrib import admin
 from django.views.generic.base import RedirectView
+from django.conf.urls.i18n import i18n_patterns
+from django.views.i18n import JavaScriptCatalog
 
-urlpatterns = [
+urlpatterns = i18n_patterns(
     url(r'^$', RedirectView.as_view(pattern_name = 'quote:top'), name = 'index'),
+    url(r'^jsi18n/$', JavaScriptCatalog.as_view(), name='javascript-catalog'),
     url(r'^admin/', admin.site.urls),
     url(r'^login$', auth_views.login, {'template_name': 'profiles/login.html', }, name = 'login'),
     url(r'^switch_user$', auth_views.logout_then_login, name = 'switch-user'),
     url(r'^user/', include('profiles.urls')),
     url(r'^quote/', include('quotes.urls', namespace = 'quote')),
-]
+    prefix_default_language = False,
+)

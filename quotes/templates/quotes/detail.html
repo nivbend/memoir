@@ -1,5 +1,6 @@
 {% extends 'quote_view.html' %}
 {% load staticfiles %}
+{% load i18n %}
 {% load quotes %}
 
 {% block title %}{{ quote }}{% endblock %}
@@ -9,7 +10,7 @@
     {% include "single_quote.html" with with_link=False %}
     <div class="row">
       <div class="col-md-12">
-        <p class="alert alert-info hidden" id="likes_list"><strong>Likes:</strong> <span id="likers"></span></p>
+        <p class="alert alert-info hidden" id="likes_list"><strong>{% trans "Likes:" %}</strong> <span id="likers"></span></p>
       </div>
     </div>
     {% if user.is_authenticated %}
@@ -18,9 +19,9 @@
           <form class="form" role="form" id="new_comment_form" action="{% url 'quote:comment-create' pk=quote.pk %}" data-source="#new_comment_text" method="POST">
             {% csrf_token %}
             <div class="form-group">
-              <textarea class="form-control" id="new_comment_text" name="text" placeholder="Say something"></textarea>
+              <textarea class="form-control" id="new_comment_text" name="text" placeholder="{% trans "What do you have to say?" %}"></textarea>
             </div>
-            <input class="btn btn-primary pull-right flip" type="submit" value="Comment"\>
+            <input class="btn btn-primary pull-right flip" type="submit" value="{% trans "Comment" %}"\>
           </form>
         </div>
       </div>
