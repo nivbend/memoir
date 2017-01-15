@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from httplib import OK, NO_CONTENT, NOT_FOUND
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User

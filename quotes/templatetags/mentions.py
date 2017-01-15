@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from functools import partial
 from django.template import Library
 from django.template.defaultfilters import stringfilter

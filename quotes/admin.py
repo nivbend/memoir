@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from django.contrib.admin import ModelAdmin, register
 from .models import Quote
 
