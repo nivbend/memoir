@@ -1,7 +1,7 @@
 {% load staticfiles %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}" rtl="{{ LANGUAGE_CODE|language_bidi|yesno:"rtl,ltr" }}">
   <head>
     <title>{% block title %}{% endblock %}</title>
     {% block stylesheets %}
