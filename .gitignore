@@ -5,3 +5,4 @@ dist/
 *.egg-info/
 
 db.sqlite3
+Memoir/local_settings.py
