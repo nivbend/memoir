@@ -1,4 +1,5 @@
 {% extends 'quote_view.html' %}
+{% load staticfiles %}
 {% load quotes %}
 
 {% block title %}{{ quote }}{% endblock %}
@@ -14,7 +15,7 @@
     {% if user.is_authenticated %}
       <div class="row" style="margin-bottom: 1em;">
         <div class="col-md-12">
-          <form class="form" role="form" id="new_comment_form" action="{% url 'quote:comment-create' pk=quote.pk %}" method="POST">
+          <form class="form" role="form" id="new_comment_form" action="{% url 'quote:comment-create' pk=quote.pk %}" data-source="#new_comment_text" method="POST">
             {% csrf_token %}
             <div class="form-group">
               <textarea class="form-control" id="new_comment_text" name="text" placeholder="Say something"></textarea>
@@ -65,31 +66,6 @@
     });
   </script>
   <script type="text/javascript">
-    $("#new_comment_form").submit(function(event) {
-      event.preventDefault();
-
-      $.ajax({
-        url: $("#new_comment_form").attr("action"),
-        method: "POST",
-        data: {
-          text: $("#new_comment_text").val(),
-        },
-        success: function (response) {
-          location.hash = "#comment_" + response.comment_pk;
-          location.reload();
-        },
-        error: function (response) {
-          if (400 == response.status) {
-            alert("Comment must have content");
-            $("#new_comment_text").focus();
-            return;
-          }
-          if (403 == response.status) {
-            alert("Must be logged in");
-            return;
-          }
-        }
-      });
-    });
+    $("#new_comment_form").submit(addComment);
   </script>
 {% endblock %}
