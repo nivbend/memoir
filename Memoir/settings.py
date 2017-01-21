@@ -55,6 +55,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'Memoir.middleware.AdminLanguageMiddleware',
 ]
 
 ROOT_URLCONF = 'Memoir.urls'
@@ -117,6 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+ADMIN_LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
