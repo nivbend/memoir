@@ -20,7 +20,60 @@
     {% block scripts %}
       <script type="text/javascript" src="{% static 'js/jquery-2.2.4.min.js' %}"></script>
       <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+      <script type="text/javascript" src="{% static 'js/jquery.textcomplete.min.js' %}"></script>
       <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+      <script type="text/javascript">
+        $("textarea").textcomplete([
+          { // References strategy.
+            match: /(^|\s)@([-\s\w\u0590-\u05fe]+)$/u,
+            indexNumber: 2,
+            search: function (term, callback) {
+              $.getJSON("{% url 'user-search' %}", { q: term })
+                .done(function (response) { callback(response.matches); })
+                .fail(function ()         { callback([]);   });
+            },
+            template: function (user, term) {
+              display = user.full_name;
+              words = term.split(" ")
+              for (i = 0; i < words.length; ++i) {
+                if (!words[i]) {
+                  continue;
+                }
+                display = display.split(words[i]).join("<strong>" + words[i] + "</strong>");
+              }
+              return display;
+            },
+            replace: function (user) {
+              return "$1@" + user.username;
+            },
+            cache: true
+          },
+          { // Speakers strategy.
+            match: /(^)([-\s\w\u0590-\u05fe]+)$/um,
+            indexNumber: 2,
+            search: function (term, callback) {
+              $.getJSON("{% url 'user-search' %}", { q: term })
+                .done(function (response) { callback(response.matches); })
+                .fail(function ()         { callback([]);   });
+            },
+            template: function (user, term) {
+              display = user.full_name;
+              words = term.split(" ")
+              for (i = 0; i < words.length; ++i) {
+                if (!words[i]) {
+                  continue;
+                }
+                display = display.split(words[i]).join("<strong>" + words[i] + "</strong>");
+              }
+              return display;
+            },
+            replace: function (user) {
+              return user.username + ": ";
+            },
+            cache: true
+          }
+        ]);
+      </script>
     {% endblock %}
   </body>
 </html>
