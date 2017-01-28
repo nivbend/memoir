@@ -81,9 +81,13 @@ class Quote(Model):
     class Meta:
         ordering = ('-created', )
 
+@python_2_unicode_compatible
 class Comment(Model):
     created = DateTimeField(auto_now_add = True)
     last_modified = DateTimeField(auto_now = True)
     author = ForeignKey(settings.AUTH_USER_MODEL, related_name = 'comments')
     quote = ForeignKey(Quote, related_name = 'comments')
     text = TextField()
+
+    def __str__(self):
+        return '#%d/%d' % (self.quote.id, self.id, )
