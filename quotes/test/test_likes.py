@@ -2,12 +2,13 @@ from __future__ import unicode_literals
 from httplib import OK
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from profiles.templatetags.profiles import profile_link
 from quotes.models import Quote
 
 PASSWORD = 'password'
 
+@override_settings(LANGUAGE_CODE = 'en-us', LANGUAGES = (('en', 'English'), ))
 class TestLikes(TestCase):
     def setUp(self):
         self.author = User.objects.create_user('author', password = PASSWORD)
@@ -54,6 +55,7 @@ class TestLikes(TestCase):
     def assert_likes(self, users):
         self.assertQuerysetEqual(self.quote.likers.all(), map(repr, users), ordered = False)
 
+@override_settings(LANGUAGE_CODE = 'en-us', LANGUAGES = (('en', 'English'), ))
 class TestLikersList(TestCase):
     def setUp(self):
         self.author = User.objects.create_user('author', password = PASSWORD)

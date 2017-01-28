@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-20 23:29+0200\n"
+"POT-Creation-Date: 2017-01-28 22:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Niv Ben-David <nivbend@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,19 +18,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: Memoir/settings.py:130
+#: Memoir/settings.py:132
 msgid "English"
 msgstr "אנגלית"
 
-#: Memoir/settings.py:131
+#: Memoir/settings.py:133
 msgid "Hebrew"
 msgstr "עברית"
 
-#: profiles/templates/profiles/login.html:21 templates/navbar.html:32
+#: profiles/templates/profiles/login.html:6
+#: profiles/templates/profiles/login.html:21 templates/navbar.html:33
 msgid "Login"
 msgstr "התחבר"
 
 #: profiles/templates/profiles/user_detail.html:22
+#: quotes/templates/quotes/list.html:3
 msgid "Quotes"
 msgstr "ציטוטים"
 
@@ -46,7 +48,7 @@ msgstr " ו"
 msgid "Add Quote"
 msgstr "שלח ציטוט"
 
-#: quotes/templates/quotes/create.html:19 templates/navbar.html:19
+#: quotes/templates/quotes/create.html:19 templates/navbar.html:20
 msgid "Create"
 msgstr "צטט"
 
@@ -62,6 +64,10 @@ msgstr "מה יש לך להגיד?"
 #: quotes/templates/quotes/detail.html:24
 msgid "Comment"
 msgstr "שלח"
+
+#: quotes/templates/quotes/edit.html:6
+msgid "Update "
+msgstr "ערוך "
 
 #: quotes/templates/quotes/edit.html:20
 #: quotes/templates/quotes/quote/comments.html:30
@@ -106,15 +112,15 @@ msgstr "האם את/ה בטוח/ה שאת/ה רוצה למחוק את הציטו
 msgid "I'm sure"
 msgstr "אני בטוח/ה"
 
-#: templates/navbar.html:13
+#: templates/navbar.html:14
 msgid "Top"
 msgstr "נבחרים"
 
-#: templates/navbar.html:26
+#: templates/navbar.html:27
 msgid "Logged in as "
 msgstr "מחובר/ת כ"
 
-#: templates/navbar.html:29
+#: templates/navbar.html:30
 msgid "switch"
 msgstr "החלף משתמש"
 

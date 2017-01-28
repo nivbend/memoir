@@ -1,8 +1,9 @@
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from ..templatetags.profiles import profile_link, listify
 
+@override_settings(LANGUAGE_CODE = 'en-us', LANGUAGES = (('en', 'English'), ))
 class TestLink(TestCase):
     def setUp(self):
         self.bob = User.objects.create_user(
@@ -48,6 +49,7 @@ class TestLink(TestCase):
         expected = '<a class="" href="/user/%s">%s</a>' % (self.bob.username, name, )
         self.assertEqual(profile_link(self.bob), expected)
 
+@override_settings(LANGUAGE_CODE = 'en-us', LANGUAGES = (('en', 'English'), ))
 class TestListify(TestCase):
     def test_empty_list(self):
         self.assertEqual(listify([]), '')
