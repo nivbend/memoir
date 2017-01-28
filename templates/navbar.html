@@ -1,6 +1,8 @@
 {% load i18n %}
 {% load profiles %}
 
+{% url 'quote:top' as top_page %}
+
 <div class="navbar navbar-inverse navbar-static-top" role="navigation">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -8,7 +10,6 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        {% url 'quote:top' as top_page %}
         <li class="{% if request.get_full_path == top_page %}active{% endif %}">
           <a href="{{ top_page }}">{% trans "Top" %}</a>
         </li>
