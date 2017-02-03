@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-28 22:31+0000\n"
+"POT-Creation-Date: 2017-02-03 13:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Niv Ben-David <nivbend@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,7 +32,7 @@ msgid "Login"
 msgstr "התחבר"
 
 #: profiles/templates/profiles/user_detail.html:22
-#: quotes/templates/quotes/list.html:3
+#: quotes/templates/quotes/list.html:4
 msgid "Quotes"
 msgstr "ציטוטים"
 
@@ -43,6 +43,21 @@ msgstr "איזכורים"
 #: profiles/templatetags/profiles.py:42
 msgid " and "
 msgstr " ו"
+
+#: quotes/models.py:39
+msgctxt "Quote"
+msgid "title"
+msgstr "כותרת"
+
+#: quotes/models.py:42
+msgctxt "Quote"
+msgid "text"
+msgstr "ציטוט"
+
+#: quotes/models.py:96
+msgctxt "Comment"
+msgid "text"
+msgstr "הערה"
 
 #: quotes/templates/quotes/create.html:6
 msgid "Add Quote"

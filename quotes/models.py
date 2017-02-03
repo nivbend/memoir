@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from django.utils.translation import pgettext_lazy
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.deconstruct import deconstructible
 from django.conf import settings
@@ -32,8 +33,13 @@ class Quote(Model):
     created = DateTimeField(auto_now_add = True)
     last_modified = DateTimeField(auto_now = True)
     author = ForeignKey(settings.AUTH_USER_MODEL, related_name = 'author_of')
-    title = CharField(max_length = 120, blank = True)
-    text = TextField(validators = [WordCountValidator(min_count = 2), ])
+    title = CharField(
+        max_length = 120,
+        blank = True,
+        verbose_name = pgettext_lazy('Quote', 'title'))
+    text = TextField(
+        validators = [WordCountValidator(min_count = 2), ],
+        verbose_name = pgettext_lazy('Quote', 'text'))
     mentions = ManyToManyField(
         settings.AUTH_USER_MODEL,
         blank = True,
@@ -87,7 +93,7 @@ class Comment(Model):
     last_modified = DateTimeField(auto_now = True)
     author = ForeignKey(settings.AUTH_USER_MODEL, related_name = 'comments')
     quote = ForeignKey(Quote, related_name = 'comments')
-    text = TextField()
+    text = TextField(verbose_name = pgettext_lazy('Comment', 'text'))
 
     def __str__(self):
         return '#%d/%d' % (self.quote.id, self.id, )
