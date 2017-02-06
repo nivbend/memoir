@@ -12,7 +12,7 @@
         <form class="form-horizontal" role="form" action="{% url 'login' %}" method="POST">
           {% csrf_token %}
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12" dir="ltr">
               {{ form|bootstrap_horizontal }}
             </div>
           </div>
