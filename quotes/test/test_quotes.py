@@ -2,10 +2,11 @@ from __future__ import unicode_literals
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.test import TestCase
-from quotes.models import Quote
+from quotes.models import Board, Quote
 
 class TestQuotes(TestCase):
     def setUp(self):
+        self.board = Board.objects.create(slug = 'board', name = 'BOARD')
         self.silent_bob = User.objects.create_user(
             username = 'sbob',
             password = 'password')
@@ -33,6 +34,6 @@ class TestQuotes(TestCase):
             quote.full_clean()
 
     def create_quote(self, text):
-        quote = Quote.objects.create(author = self.silent_bob, text = text)
+        quote = Quote.objects.create(board = self.board, author = self.silent_bob, text = text)
         quote.full_clean()
         return quote

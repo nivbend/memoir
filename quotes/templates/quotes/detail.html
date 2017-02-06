@@ -6,6 +6,7 @@
 {% block title %}{{ quote }}{% endblock %}
 
 {% block content %}
+  {% url 'board:quote:comment-create' view.kwargs.board quote.pk as create_comment_page %}
   <div class="container">
     {% include "single_quote.html" with with_link=False %}
     <div class="row">
@@ -16,7 +17,7 @@
     {% if user.is_authenticated %}
       <div class="row" style="margin-bottom: 1em;">
         <div class="col-md-12">
-          <form class="form" role="form" id="new_comment_form" action="{% url 'quote:comment-create' pk=quote.pk %}" data-source="#new_comment_text" method="POST">
+          <form class="form" role="form" id="new_comment_form" action="{{ create_comment_page }}" data-source="#new_comment_text" method="POST">
             {% csrf_token %}
             <div class="form-group">
               <textarea class="form-control" id="new_comment_text" name="text" placeholder="{% trans "What do you have to say?" %}"></textarea>
@@ -35,12 +36,14 @@
 {% endblock %}
 
 {% block scripts %}
+  {% url 'board:quote:likers' view.kwargs.board quote.pk as likers_page %}
+  {% url 'board:quote:like' board=view.kwargs.board pk=quote.pk as like_page %}
   {{ block.super }}
   <script type="text/javascript">
     function updateLikes(likers) {
       if (likers.length) {
         $.get({
-          url: "{% url 'quote:likers' pk=quote.pk %}",
+          url: "{{ likers_page }}",
           data: {"likers": likers },
           success: function(response) {
             $("#likes_list > #likers").html(response);
@@ -54,7 +57,7 @@
 
     $(function () {
       $.get({
-        "url": "{% url 'quote:like' pk=quote.pk %}",
+        "url": "{{ like_page }}",
         success: function(response) {
           updateLikes(response.likers);
         }});

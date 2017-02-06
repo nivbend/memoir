@@ -1,7 +1,8 @@
 {% load i18n %}
 {% load profiles %}
 
-{% url 'quote:top' as top_page %}
+{% url 'board:top' board=view.kwargs.board as top_page %}
+{% url 'board:quote:create' board=view.kwargs.board as create_page %}
 
 <div class="navbar navbar-inverse navbar-static-top" role="navigation">
   <div class="container-fluid">
@@ -9,17 +10,22 @@
       <a class="navbar-brand" href="{% url 'index' %}">Memoir</a>
     </div>
     <div class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li class="{% if request.get_full_path == top_page %}active{% endif %}">
-          <a href="{{ top_page }}">{% trans "Top" %}</a>
-        </li>
-      </ul>
+      {% if view.kwargs.board is not None %}
+        <ul class="nav navbar-nav">
+          <span class="navbar-text">{{ view.board.name }}</span>
+          <li class="{% if request.get_full_path == top_page %}active{% endif %}">
+            <a href="{{ top_page }}">{% trans "Top" %}</a>
+          </li>
+        </ul>
+      {% endif %}
       <ul class="nav navbar-nav navbar-right flip">
-        <li>
-          <div class="btn-nav">
-            <a class="btn btn-primary navbar-btn" href="{% url 'quote:create' %}">{% trans "Create" %}</a>
-          </div>
-        </li>
+        {% if view.kwargs.board is not None %}
+          <li>
+            <div class="btn-nav">
+              <a class="btn btn-primary navbar-btn" href="{{ create_page }}">{% trans "Create" %}</a>
+            </div>
+          </li>
+        {% endif %}
         <li>
           <div class="navbar-text">
             {% if user.is_authenticated %}

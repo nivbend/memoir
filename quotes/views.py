@@ -9,15 +9,31 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponse, JsonResponse, Http404, QueryDict
 from django.http import HttpResponseForbidden
-from .models import Quote, Comment
+from .models import Board, Quote, Comment
 
-class QuoteList(ListView):
+class BoardViewMixin(object):
+    @property
+    def board(self):
+        return Board.objects.get(slug__iexact = self.kwargs.get('board', ''))
+
+    def _get_quote_or_404(self, quote_pk):
+        return get_object_or_404(
+            self.board.quotes.all(),
+            pk = quote_pk)
+
+    def _get_comment_or_404(self, quote_pk, comment_pk):
+        return get_object_or_404(
+            self._get_quote_or_404(quote_pk).comments.all(),
+            pk = comment_pk)
+
+class QuoteList(ListView, BoardViewMixin):
     model = Quote
     template_name = 'quotes/list.html'
     context_object_name = 'quotes'
 
     def get_queryset(self):
-        queryset = super(QuoteList, self).get_queryset()
+        queryset = super(QuoteList, self).get_queryset() \
+            .filter(board__slug__iexact = self.board.slug)
 
         author = self.request.GET.get('by', None)
         mentions = self.request.GET.get('mentioned', None)
@@ -43,58 +59,59 @@ class QuoteList(ListView):
         return queryset
 
 @method_decorator(login_required, name = 'dispatch')
-class QuoteCreate(CreateView):
+class QuoteCreate(CreateView, BoardViewMixin):
     model = Quote
     template_name = 'quotes/create.html'
     fields = ('title', 'text', )
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        form.instance.board = self.board
         return super(QuoteCreate, self).form_valid(form)
 
-class QuoteDetail(DetailView):
+class QuoteDetail(DetailView, BoardViewMixin):
     model = Quote
     template_name = 'quotes/detail.html'
     context_object_name = 'quote'
 
 @method_decorator(login_required, name = 'dispatch')
-class QuoteEdit(UpdateView):
+class QuoteEdit(UpdateView, BoardViewMixin):
     model = Quote
     template_name = 'quotes/edit.html'
     fields = ('title', 'text', )
 
 @method_decorator(login_required, name = 'dispatch')
-class QuoteDelete(DeleteView):
+class QuoteDelete(DeleteView, BoardViewMixin):
     model = Quote
     success_url = reverse_lazy('index')
 
-class TopQuotes(QuoteList):
+class TopQuotes(QuoteList, BoardViewMixin):
     def get_queryset(self):
         queryset = super(TopQuotes, self).get_queryset().annotate(likers_count = Count('likers'))
         return queryset.order_by('-likers_count', '-created')
 
-class LikeView(View):
-    def get(self, request, pk):
-        quote = get_object_or_404(Quote, pk = pk)
+class LikeView(View, BoardViewMixin):
+    def get(self, request, board, pk):
+        quote = self._get_quote_or_404(pk)
         return JsonResponse({'likers': map(str, quote.likers.all()), })
 
-    def put(self, request, pk):
+    def put(self, request, board, pk):
         if self.request.user.pk is None:
             return HttpResponseForbidden()
 
-        quote = get_object_or_404(Quote, pk = pk)
+        quote = self._get_quote_or_404(pk)
         quote.likers.add(self.request.user)
         return JsonResponse({'likers': map(str, quote.likers.all()), })
 
-    def delete(self, request, pk):
+    def delete(self, request, board, pk):
         if self.request.user.pk is None:
             return HttpResponseForbidden()
 
-        quote = get_object_or_404(Quote, pk = pk)
+        quote = self._get_quote_or_404(pk)
         quote.likers.remove(self.request.user)
         return JsonResponse({'likers': map(str, quote.likers.all()), })
 
-class LikersList(TemplateView):
+class LikersList(TemplateView, BoardViewMixin):
     template_name = 'quotes/likers.html'
 
     def get_context_data(self, **kwargs):
@@ -111,8 +128,8 @@ class LikersList(TemplateView):
         return context
 
 @method_decorator(login_required, name = 'dispatch')
-class Comments(View):
-    def post(self, request, pk):
+class Comments(View, BoardViewMixin):
+    def post(self, request, board, pk):
         comment_text = self.request.POST['text']
 
         # It's worth noting we check the stripped version, but save the text as
@@ -120,15 +137,15 @@ class Comments(View):
         if not comment_text.strip():
             return HttpResponse(status = BAD_REQUEST)
 
-        quote = get_object_or_404(Quote, pk = pk)
+        quote = self._get_quote_or_404(pk)
         comment = quote.comments.create(
             author = self.request.user,
             text = comment_text)
 
         return JsonResponse({'comment_pk': comment.pk, })
 
-    def put(self, request, pk, comment_pk):
-        comment = _get_comment_or_404(pk, comment_pk)
+    def put(self, request, board, pk, comment_pk):
+        comment = self._get_comment_or_404(pk, comment_pk)
         comment_text = QueryDict(request.body)['text']
 
         # It's worth noting we check the stripped version, but save the text as
@@ -141,18 +158,8 @@ class Comments(View):
 
         return HttpResponse(status = NO_CONTENT)
 
-    def delete(self, request, pk, comment_pk):
-        comment = _get_comment_or_404(pk, comment_pk)
-
+    def delete(self, request, board, pk, comment_pk):
+        comment = self._get_comment_or_404(pk, comment_pk)
         comment.delete()
 
         return HttpResponse(status = NO_CONTENT)
-
-def _get_comment_or_404(quote_pk, comment_pk):
-    quote = get_object_or_404(Quote, pk = quote_pk)
-    comment = quote.comments.filter(pk = comment_pk)
-
-    if not comment.exists():
-        raise Http404()
-
-    return comment.get()

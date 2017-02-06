@@ -21,12 +21,20 @@
       <div class="panel-body">{% quote_body %}</div>
       <div class="panel-footer clearfix">
         <div class="row vertical-align">
-          <div class="col-md-3">
+          <div class="col-md-5">
             <span class="text-muted">
-              {% trans "By " %}<bdi>{% profile_link quote.author %}</bdi>, {{ quote.created }}
+              {% spaceless %}
+                <span>{% trans "By " %}<bdi>{% profile_link quote.author %}</bdi></span>
+                {% if view.board is None %}
+                  <span>&nbsp;{% trans "on " %}<bdi>
+                      <a href="{% url 'board:top' board=quote.board.slug %}">{{ quote.board }}</a>
+                  </bdi></span>
+                {% endif %}
+                <span>,&nbsp;{{ quote.created }}</span>
+              {% endspaceless %}
             </span>
           </div>
-          <div class="col-md-1 col-md-offset-8">
+          <div class="col-md-1 col-md-offset-6">
             <div class="btn-group pull-right flip" role="group">
               {% like_button %}
             </div>

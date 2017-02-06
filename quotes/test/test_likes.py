@@ -4,16 +4,21 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase, override_settings
 from profiles.templatetags.profiles import profile_link
-from quotes.models import Quote
+from quotes.models import Board, Quote
 
 PASSWORD = 'password'
 
 @override_settings(LANGUAGE_CODE = 'en-us', LANGUAGES = (('en', 'English'), ))
 class TestLikes(TestCase):
     def setUp(self):
+        self.board = Board.objects.create(slug = 'board', name = 'BOARD')
         self.author = User.objects.create_user('author', password = PASSWORD)
-        self.quote = Quote.objects.create(author = self.author, text = 'QUOTE TEXT')
-        self.url = reverse('quote:like', args = (self.quote.pk, ))
+        self.quote = Quote.objects.create(
+            board = self.board,
+            author = self.author,
+            text = 'QUOTE TEXT')
+
+        self.url = reverse('board:quote:like', args = (self.board.slug, self.quote.pk, ))
 
         self.client.login(username = 'author', password = PASSWORD)
 
@@ -58,15 +63,20 @@ class TestLikes(TestCase):
 @override_settings(LANGUAGE_CODE = 'en-us', LANGUAGES = (('en', 'English'), ))
 class TestLikersList(TestCase):
     def setUp(self):
+        self.board = Board.objects.create(slug = 'board', name = 'BOARD')
         self.author = User.objects.create_user('author', password = PASSWORD)
         self.me = User.objects.create_user('me', password = PASSWORD)
         self.users = [
             User.objects.create_user('user_%d' % (i, ), password = PASSWORD)
             for i in xrange(4)]
 
-        self.quote = Quote.objects.create(author = self.author, text = 'QUOTE TEXT')
-        self.url_like = reverse('quote:like', args = (self.quote.pk, ))
-        self.url_likers = reverse('quote:likers', args = (self.quote.pk, ))
+        self.quote = Quote.objects.create(
+            board = self.board,
+            author = self.author,
+            text = 'QUOTE TEXT')
+
+        self.url_like = reverse('board:quote:like', args = (self.board.slug, self.quote.pk, ))
+        self.url_likers = reverse('board:quote:likers', args = (self.board.slug, self.quote.pk, ))
 
     def test_you_alone(self):
         self.login('me')

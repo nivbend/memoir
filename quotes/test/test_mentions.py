@@ -1,11 +1,13 @@
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.test import TestCase
-from quotes.models import Quote
+from quotes.models import Board, Quote
 from ..templatetags.mentions import speakers, references, mentions
 
 class BaseMentionsTestCase(TestCase):
     def setUp(self):
+        self.board = Board.objects.create(slug = 'board', name = 'BOARD')
+
         self.lerry_david = User.objects.create_user(
             username = 'lerry_david',
             password = 'password')
@@ -37,7 +39,7 @@ class BaseMentionsTestCase(TestCase):
         self.kramer.profile.save()
 
     def create_quote(self, text):
-        return Quote.objects.create(author = self.lerry_david, text = text)
+        return Quote.objects.create(board = self.board, author = self.lerry_david, text = text)
 
     def assert_mentions(self, quote, speakers):
         self.assertQuerysetEqual(quote.mentions.all(), map(repr, speakers), ordered = False)

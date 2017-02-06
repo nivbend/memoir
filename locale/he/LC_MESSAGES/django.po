@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-03 13:57+0000\n"
+"POT-Creation-Date: 2017-02-06 19:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Niv Ben-David <nivbend@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgid "Hebrew"
 msgstr "עברית"
 
 #: profiles/templates/profiles/login.html:6
-#: profiles/templates/profiles/login.html:21 templates/navbar.html:33
+#: profiles/templates/profiles/login.html:21 templates/navbar.html:39
 msgid "Login"
 msgstr "התחבר"
 
@@ -44,17 +44,17 @@ msgstr "איזכורים"
 msgid " and "
 msgstr " ו"
 
-#: quotes/models.py:39
+#: quotes/models.py:50
 msgctxt "Quote"
 msgid "title"
 msgstr "כותרת"
 
-#: quotes/models.py:42
+#: quotes/models.py:53
 msgctxt "Quote"
 msgid "text"
 msgstr "ציטוט"
 
-#: quotes/models.py:96
+#: quotes/models.py:107
 msgctxt "Comment"
 msgid "text"
 msgstr "הערה"
@@ -63,20 +63,20 @@ msgstr "הערה"
 msgid "Add Quote"
 msgstr "שלח ציטוט"
 
-#: quotes/templates/quotes/create.html:19 templates/navbar.html:20
+#: quotes/templates/quotes/create.html:19 templates/navbar.html:25
 msgid "Create"
 msgstr "צטט"
 
-#: quotes/templates/quotes/detail.html:13
+#: quotes/templates/quotes/detail.html:14
 msgid "Likes:"
 msgstr "אהבו:"
 
-#: quotes/templates/quotes/detail.html:22
+#: quotes/templates/quotes/detail.html:23
 #: quotes/templates/quotes/quote/comments.html:24
 msgid "What do you have to say?"
 msgstr "מה יש לך להגיד?"
 
-#: quotes/templates/quotes/detail.html:24
+#: quotes/templates/quotes/detail.html:25
 msgid "Comment"
 msgstr "שלח"
 
@@ -127,15 +127,31 @@ msgstr "האם את/ה בטוח/ה שאת/ה רוצה למחוק את הציטו
 msgid "I'm sure"
 msgstr "אני בטוח/ה"
 
-#: templates/navbar.html:14
+#: templates/index.html:24
+msgid "No boards, apparently"
+msgstr "אין קבוצות, כנראה"
+
+#: templates/index.html:27
+#, fuzzy, python-format
+msgid ""
+"\n"
+"                  You should <a href=\"%(add_url)s\">add some</a> in the "
+"admin interface.\n"
+"                "
+msgstr ""
+"\n"
+"                ניתן <a href=\"%(add_url)s\">להוסיף קבוצה</a> בממשק "
+"הניהול.              "
+
+#: templates/navbar.html:17
 msgid "Top"
 msgstr "נבחרים"
 
-#: templates/navbar.html:27
+#: templates/navbar.html:33
 msgid "Logged in as "
 msgstr "מחובר/ת כ"
 
-#: templates/navbar.html:30
+#: templates/navbar.html:36
 msgid "switch"
 msgstr "החלף משתמש"
 
@@ -154,6 +170,10 @@ msgstr[1] ""
 "\n"
 "%(counter)s הערות\n"
 
-#: templates/single_quote.html:26
+#: templates/single_quote.html:27
 msgid "By "
 msgstr "ע\"י "
+
+#: templates/single_quote.html:29
+msgid "on "
+msgstr "ב"

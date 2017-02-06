@@ -29,12 +29,16 @@
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="quotes">
           {% for quote in profile.quotes %}
-            {% include "single_quote.html" %}
+            {% if quote.board in user.profile.boards or user.is_superuser %}
+              {% include "single_quote.html" %}
+            {% endif %}
           {% endfor %}
         </div>
         <div role="tabpanel" class="tab-pane" id="mentions">
           {% for quote in profile.mentions %}
-            {% include "single_quote.html" %}
+            {% if quote.board in user.profile.boards or user.is_superuser %}
+              {% include "single_quote.html" %}
+            {% endif %}
           {% endfor %}
         </div>
       </div>

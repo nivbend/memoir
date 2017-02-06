@@ -3,7 +3,7 @@ from httplib import OK, NO_CONTENT, NOT_FOUND
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
-from quotes.models import Quote, Comment
+from quotes.models import Board, Quote, Comment
 
 class FailedAction(Exception):
     def __init__(self, action, response):
@@ -15,12 +15,21 @@ class FailedAction(Exception):
 
 class TestComments(TestCase):
     def setUp(self):
+        self.board = Board.objects.create(slug = 'board', name = 'BOARD')
         self.author = User.objects.create_user(username = 'author', password = 'password')
         self.commenter = User.objects.create_user(username = 'commenter', password = 'password')
-        self.quote = Quote.objects.create(author = self.author, text = 'QUOTE TEXT')
+        self.quote = Quote.objects.create(board = self.board, author = self.author, text = 'QUOTE TEXT')
 
-        self._url_create = reverse('quote:comment-create', args = (self.quote.pk, ))
-        self._expected_url = reverse('quote:detail', kwargs = {'pk': self.quote.pk, })
+        self._url_create = reverse(
+            'board:quote:comment-create',
+            args = (self.board.slug, self.quote.pk, ))
+
+        self._expected_url = reverse(
+            'board:quote:detail',
+            kwargs = {
+                'board': self.board.slug,
+                'pk': self.quote.pk,
+        })
 
         self.client.login(username = 'commenter', password = 'password')
 
@@ -118,7 +127,10 @@ class TestComments(TestCase):
         self.assertFalse(self.quote.comments.filter(pk = comment_pk).exists())
 
     def _comment_url(self, comment_pk):
-        return reverse('quote:comment', kwargs = {
-            'pk': self.quote.pk,
-            'comment_pk': comment_pk,
+        return reverse(
+            'board:quote:comment',
+            kwargs = {
+                'board': self.board.slug,
+                'pk': self.quote.pk,
+                'comment_pk': comment_pk,
         })

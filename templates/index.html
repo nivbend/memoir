@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Memoir{% endblock %}
+
+{% block content %}
+  {% url 'admin:quotes_board_add' as add_url %}
+  <div class="container">
+    <div class="row">
+      {% if boards %}
+        <div class="col-md-6 col-md-offset-3">
+          <div class="list-group">
+            {% for board in boards %}
+              <a href="{% url 'board:top' board=board.slug %}" class="list-group-item">
+                {{ board.name }}
+                <span class="badge">{{ board.quotes.count }}</span>
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      {% else %}
+        <div class="col-md-12">
+          <div class="jumbotron">
+            <h1>{% trans "No boards, apparently" %}</h1>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

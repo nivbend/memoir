@@ -5,7 +5,7 @@
 <div class="panel panel-default {% if not comments %}hidden{% endif %}">
   <table class="table table-bordered table-condensed">
     {% for comment in comments %}
-      {% url 'quote:comment' pk=quote_pk comment_pk=comment.pk as comment_url%}
+      {% url 'board:quote:comment' board=board.slug pk=quote_pk comment_pk=comment.pk as comment_url %}
       <tr>
         <td id="comment_{{ comment.pk }}">
           <div class="" id="comment_{{ comment.pk }}_detail">

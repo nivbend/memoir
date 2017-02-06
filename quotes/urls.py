@@ -1,12 +1,9 @@
 from __future__ import unicode_literals
-from django.conf.urls import url
-
+from django.conf.urls import url, include
 from .views import QuoteList, QuoteDetail, QuoteCreate, QuoteEdit, QuoteDelete
 from .views import TopQuotes, LikeView, LikersList, Comments
 
-urlpatterns = [
-    url(r'^$', QuoteList.as_view(), name = 'list'),
-    url(r'^top$', TopQuotes.as_view(), name = 'top'),
+quote_urlpatterns = [
     url(r'^create$', QuoteCreate.as_view(), name = 'create'),
     url(r'^(?P<pk>\d+)$', QuoteDetail.as_view(), name = 'detail'),
     url(r'^(?P<pk>\d+)/edit$', QuoteEdit.as_view(), name = 'edit'),
@@ -15,4 +12,10 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/likers$', LikersList.as_view(), name = 'likers'),
     url(r'^(?P<pk>\d+)/comment$', Comments.as_view(), name = 'comment-create'),
     url(r'^(?P<pk>\d+)/comment/(?P<comment_pk>\d+)$', Comments.as_view(), name = 'comment'),
+]
+
+urlpatterns = [
+    url(r'^$', QuoteList.as_view(), name = 'list'),
+    url(r'^top$', TopQuotes.as_view(), name = 'top'),
+    url(r'^quote/', include(quote_urlpatterns, namespace = 'quote')),
 ]

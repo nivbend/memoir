@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from operator import or_
 from django.core.urlresolvers import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.conf import settings
@@ -9,6 +10,10 @@ from django.db.models import OneToOneField, CharField
 class UserProfile(Model):
     user = OneToOneField(settings.AUTH_USER_MODEL, on_delete = CASCADE, related_name = 'profile')
     nickname = CharField(max_length = 20, blank = True)
+
+    @property
+    def boards(self):
+        return reduce(or_, (g.boards.all() for g in self.user.groups.all())).distinct()
 
     @property
     def quotes(self):

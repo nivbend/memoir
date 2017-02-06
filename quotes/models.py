@@ -4,10 +4,11 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.deconstruct import deconstructible
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.db.models import Model
-from django.db.models import DateTimeField, ForeignKey, CharField, TextField, ManyToManyField
+from django.db.models import DateTimeField, ForeignKey, CharField, TextField, SlugField, ManyToManyField
 from .regex import REGEX_SPEAKER, REGEX_REFERENCE
 
 @deconstructible
@@ -29,9 +30,19 @@ class WordCountValidator(object):
             raise ValidationError('Can\'t enter more than %d words' % (self.max_count, ))
 
 @python_2_unicode_compatible
+class Board(Model):
+    slug = SlugField(max_length = 20, unique = True)
+    name = CharField(max_length = 20, unique = True)
+    groups = ManyToManyField(Group, related_name = 'boards')
+
+    def __str__(self):
+        return '%s' % (self.name, )
+
+@python_2_unicode_compatible
 class Quote(Model):
     created = DateTimeField(auto_now_add = True)
     last_modified = DateTimeField(auto_now = True)
+    board = ForeignKey(Board, related_name = 'quotes')
     author = ForeignKey(settings.AUTH_USER_MODEL, related_name = 'author_of')
     title = CharField(
         max_length = 120,
@@ -63,7 +74,7 @@ class Quote(Model):
         self.__update_mentions()
 
     def get_absolute_url(self):
-        return reverse('quote:detail', kwargs = {'pk': self.pk, })
+        return reverse('board:quote:detail', kwargs = {'board': self.board.slug, 'pk': self.pk, })
 
     def __update_mentions(self):
         self.mentions.clear()

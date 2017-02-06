@@ -15,6 +15,6 @@ def like_button(context):
     return {
         'classes': button_classes,
         'button_id': 'like_%d' % (quote.pk, ),
-        'url': reverse('quote:like', kwargs = {'pk': quote.pk, }),
+        'url': reverse('board:quote:like', kwargs = {'board': quote.board.slug, 'pk': quote.pk, }),
         'count': quote.likers.count(),
     }

@@ -9,7 +9,7 @@ def user_buttons(context):
     quote = context['quote']
 
     return {
-        'edit_url': reverse('quote:edit', kwargs = {'pk': quote.pk, }),
+        'edit_url': reverse('board:quote:edit', kwargs = {'board': quote.board.slug, 'pk': quote.pk, }),
         'delete_modal_id': 'delete_modal_%d' % (quote.pk, ),
     }
 
@@ -20,7 +20,7 @@ def quote_title(context):
 
     detail_url = ''
     if with_link:
-        detail_url = reverse('quote:detail', kwargs = {'pk': quote.pk, })
+        detail_url = reverse('board:quote:detail', kwargs = {'board': quote.board.slug, 'pk': quote.pk, })
 
     return {
         'quote_title': str(quote),
@@ -37,7 +37,7 @@ def delete_modal(context):
 
     return {
         'delete_modal_id': 'delete_modal_%d' % (quote.id, ),
-        'delete_url': reverse('quote:delete', kwargs = {'pk': quote.pk, }),
+        'delete_url': reverse('board:quote:delete', kwargs = {'board': quote.board.slug, 'pk': quote.pk, }),
     }
 
 @register.inclusion_tag('quotes/quote/comments.html', takes_context = True)
@@ -45,6 +45,7 @@ def comments(context):
     quote = context['quote']
 
     return {
+        'board': quote.board,
         'quote_pk': quote.pk,
         'comments': quote.comments.all(),
         'user': context['user'],
