@@ -13,8 +13,8 @@ register = Library()
 @register.filter(needs_autoescape = True)
 @stringfilter
 def mentions(text, autoescape = True):
-    text = speakers(text, autoescape = autoescape)
     text = references(text, autoescape = autoescape)
+    text = speakers(text, autoescape = autoescape)
     return text
 
 @register.filter(needs_autoescape = True)
@@ -25,11 +25,22 @@ def speakers(text, autoescape = True):
     else:
         escape = lambda c: c
 
-    text = REGEX_SPEAKER.sub(
-        partial(_replace_speaker, escape = escape),
-        text)
+    for line in text.splitlines():
+        match = REGEX_SPEAKER.match(line)
+        if match:
+            (mention, nickname, text) = match.groups()
+            nickname = _fix_nickname(nickname)
+            if nickname:
+                nickname = nickname.replace(' ', '&nbsp;')
 
-    return mark_safe(text)
+            try:
+                speaker = User.objects.get(username = mention)
+            except User.DoesNotExist:
+                yield (None, None, mark_safe(line))
+
+            yield (speaker, nickname, mark_safe(text))
+        else:
+            yield (None, None, mark_safe(line))
 
 @register.filter(needs_autoescape = True)
 @stringfilter
@@ -48,24 +59,8 @@ def references(text, autoescape = True):
 
     return mark_safe(text)
 
-def _replace_speaker(match, escape = lambda c: c):
-    (mention, nickname, ) = match.groups()
-    nickname = _fix_nickname(nickname)
-
-    try:
-        speaker = User.objects.get(username = mention)
-    except User.DoesNotExist:
-        return match.string[match.start():match.end()]
-
-    link = profile_link(
-        speaker,
-        force_nickname = nickname,
-        classes = 'text-primary')
-
-    return '<strong>%s:</strong>' % (link, )
-
 def _replace_reference(match, escape = lambda c: c):
-    (previous_char, mention, nickname, ) = match.groups()
+    (previous_char, mention, nickname) = match.groups()
     nickname = _fix_nickname(nickname)
 
     try:

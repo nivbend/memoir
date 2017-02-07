@@ -150,8 +150,6 @@ class TestFilters(BaseMentionsTestCase):
     def setUp(self):
         super(TestFilters, self).setUp()
 
-        self.speaker_jerry = _speaker(self.jerry)
-        self.speaker_george = _speaker(self.george)
         self.reference_jerry = _reference(self.jerry)
         self.reference_kramer = _reference(self.kramer)
         self.reference_elaine = _reference(self.elaine)
@@ -166,14 +164,13 @@ class TestFilters(BaseMentionsTestCase):
             'jerry_s: How does that affect me?',
         ])
 
-        expected_output = '\n'.join([
-            '%s You\'ve got to apologize.' % (self.speaker_george, ),
-            '%s Why?' % (self.speaker_jerry, ),
-            '%s Because it\'s the mature and adult thing to do.' % (self.speaker_george, ),
-            '%s How does that affect me?' % (self.speaker_jerry, ),
+        self.assertSequenceEqual(
+            list(speakers(quote)),
+            [(self.george, None, 'You\'ve got to apologize.'),
+             (self.jerry, None, 'Why?'),
+             (self.george, None, 'Because it\'s the mature and adult thing to do.'),
+             (self.jerry, None, 'How does that affect me?'),
         ])
-
-        self.assertMultiLineEqual(speakers(quote), expected_output)
 
     def test_references(self):
         self.assertMultiLineEqual(references('@jerry_s'), self.reference_jerry)
@@ -197,12 +194,10 @@ class TestFilters(BaseMentionsTestCase):
             'george_c: @jerry_s, just remember, it\'s not a lie if you believe it.',
         ])
 
-        expected_output = '\n'.join([
-            '%s %s, just remember, it\'s not a lie if you believe it.'
-                % (self.speaker_george, self.reference_jerry, ),
+        self.assertSequenceEqual(
+            list(mentions(quote)),
+            [(self.george, None, '%s, just remember, it\'s not a lie if you believe it.' % (self.reference_jerry, )),
         ])
-
-        self.assertMultiLineEqual(mentions(quote), expected_output)
 
     def test_escaped_reference(self):
         self.assertEqual(references('\@jerry_s'), '&comat;jerry_s')
@@ -211,32 +206,58 @@ class TestFilters(BaseMentionsTestCase):
         self.george.profile.nickname = 'T-Bone'
         self.george.profile.save()
 
-        self.assertEqual(speakers('george_c:'), _speaker(self.george, 'T-Bone'))
+        self.assertSequenceEqual(list(speakers('george_c:')), [(self.george, None, ''), ])
         self.assertEqual(references('@george_c'), _reference(self.george, 'T-Bone'))
 
     def test_random_nicknames(self):
         # Short nicknames.
-        self.assertEqual(speakers('george_c|T-Bone:'), _speaker(self.george, 'T-Bone'))
+        self.assertSequenceEqual(
+            list(speakers('george_c|T-Bone:')),
+            [(self.george, 'T-Bone', ''),
+        ])
+
         self.assertEqual(references('@george_c|T-Bone'), _reference(self.george, 'T-Bone'))
 
         # Multi-word nicknames.
-        self.assertEqual(speakers('george_c|"Tee Bone":'), _speaker(self.george, 'Tee Bone'))
+        self.assertSequenceEqual(
+            list(speakers('george_c|"Tee Bone":')),
+            [(self.george, _nbsp('Tee Bone'), ''),
+        ])
+
         self.assertEqual(references('@george_c|"Tee Bone"'), _reference(self.george, 'Tee Bone'))
 
         # Override existing nicknames.
-        self.assertEqual(speakers('kramer|kman:'), _speaker(self.kramer, 'kman'))
+        self.assertSequenceEqual(
+            list(speakers('kramer|kman:')),
+            [(self.kramer, 'kman', ''),
+        ])
+
+        self.assertSequenceEqual(
+            list(speakers('kramer|"K\' Man":')),
+            [(self.kramer, _nbsp('K\' Man'), ''),
+        ])
+
         self.assertEqual(references('@kramer|kman'), _reference(self.kramer, 'kman'))
-        self.assertEqual(speakers('kramer|"K\' Man":'), _speaker(self.kramer, 'K\' Man'))
         self.assertEqual(references('@kramer|"K\' man"'), _reference(self.kramer, 'K\' man'))
 
-def _speaker(user, nickname = None):
-    return ''.join([
-        '<strong>',
-        '<a class="text-primary" href="/user/%s">' % (user.username, ),
-        '%s' % (nickname if nickname else user.first_name, ),
-        '</a>:',
-        '</strong>',
-    ])
+        # Test everything.
+        quote = '\n'.join([
+            'jerry_s: That\'s a g-spot.',
+            'george_c|"Tee Bone": That\'s a myth.',
+            '@george_c takes a bite of his sandwich and gets a piece stuck to his chin.',
+            'jerry_s: @george_c|T-Bone, the ladies are gonna love ya\'',
+        ])
+
+        expected_output = [
+            (self.jerry, None, 'That\'s a g-spot.'),
+            (self.george, _nbsp('Tee Bone'), 'That\'s a myth.'),
+            (None, None, '%s takes a bite of his sandwich and gets a piece stuck to his chin.'
+                % (_reference(self.george), )),
+            (self.jerry, None, '%s, the ladies are gonna love ya\''
+                % (_reference(self.george, 'T-Bone'), )),
+        ]
+
+        self.assertSequenceEqual(list(mentions(quote)), expected_output)
 
 def _reference(user, nickname = None):
     return ''.join([
@@ -246,3 +267,6 @@ def _reference(user, nickname = None):
         '</a>',
         '</strong>',
     ])
+
+def _nbsp(text):
+    return text.replace(' ', '&nbsp;')

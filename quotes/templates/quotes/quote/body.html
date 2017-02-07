@@ -1,3 +1,15 @@
+{% load profiles %}
 {% load mentions %}
 
-<span>{{ quote_text|mentions|linebreaksbr }}</span>
+<table>
+  {% for speaker, nickname, text in quote_text|mentions %}
+    <tr>
+      {% if speaker %}
+        <th style="text-align: left" valign="top">{% profile_link speaker force_nickname=nickname classes="text-primary" %}:</td>
+      {% else %}
+        <td></td>
+      {% endif %}
+      <td style="padding-left: 5px; padding-right: 5px;" valign="top">{{ text }}<br/></td>
+    </tr>
+  {% endfor %}
+</table>

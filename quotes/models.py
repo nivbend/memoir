@@ -80,7 +80,7 @@ class Quote(Model):
         self.mentions.clear()
 
         # Mark speakers as mentioned.
-        for (speaker, _) in REGEX_SPEAKER.findall(self.text):
+        for (speaker, _, _) in REGEX_SPEAKER.findall(self.text):
             try:
                 self.mentions.add(get_user_model().objects.get(username = speaker))
             except get_user_model().DoesNotExist:

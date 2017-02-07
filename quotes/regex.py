@@ -5,7 +5,8 @@ REGEX_SPEAKER = re.compile(
     r''.join([
         r'^([\w_]+)',                       # Username.
         r'(?:\|([^"\s,.;:]+|"[^":]+"))?',   # Forced nickname.
-        r':',
+        r':\s*',
+        r'(.*)$',                           # Quoted text.
     ]),
     re.MULTILINE)
 
