@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-06 19:21+0000\n"
+"POT-Creation-Date: 2017-02-08 22:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Niv Ben-David <nivbend@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgid "Hebrew"
 msgstr "עברית"
 
 #: profiles/templates/profiles/login.html:6
-#: profiles/templates/profiles/login.html:21 templates/navbar.html:39
+#: profiles/templates/profiles/login.html:21 templates/navbar.html:43
 msgid "Login"
 msgstr "התחבר"
 
@@ -63,7 +63,7 @@ msgstr "הערה"
 msgid "Add Quote"
 msgstr "שלח ציטוט"
 
-#: quotes/templates/quotes/create.html:19 templates/navbar.html:25
+#: quotes/templates/quotes/create.html:19 templates/navbar.html:29
 msgid "Create"
 msgstr "צטט"
 
@@ -131,27 +131,19 @@ msgstr "אני בטוח/ה"
 msgid "No boards, apparently"
 msgstr "אין קבוצות, כנראה"
 
-#: templates/index.html:27
-#, fuzzy, python-format
-msgid ""
-"\n"
-"                  You should <a href=\"%(add_url)s\">add some</a> in the "
-"admin interface.\n"
-"                "
-msgstr ""
-"\n"
-"                ניתן <a href=\"%(add_url)s\">להוסיף קבוצה</a> בממשק "
-"הניהול.              "
+#: templates/navbar.html:18
+msgid "Recent"
+msgstr "אחרונים"
 
-#: templates/navbar.html:17
+#: templates/navbar.html:21
 msgid "Top"
 msgstr "נבחרים"
 
-#: templates/navbar.html:33
+#: templates/navbar.html:37
 msgid "Logged in as "
 msgstr "מחובר/ת כ"
 
-#: templates/navbar.html:36
+#: templates/navbar.html:40
 msgid "switch"
 msgstr "החלף משתמש"
 

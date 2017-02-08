@@ -87,7 +87,7 @@ class QuoteDelete(DeleteView, BoardViewMixin):
 class TopQuotes(QuoteList, BoardViewMixin):
     def get_queryset(self):
         queryset = super(TopQuotes, self).get_queryset().annotate(likers_count = Count('likers'))
-        return queryset.order_by('-likers_count', '-created')
+        return queryset.filter(likers_count__gte = 1).order_by('-likers_count', '-created')
 
     def get_context_data(self, **kwargs):
         try:

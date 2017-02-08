@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load profiles %}
 
+{% url 'board:list' board=view.kwargs.board as recent_page %}
 {% url 'board:top' board=view.kwargs.board as top_page %}
 {% url 'board:quote:create' board=view.kwargs.board as create_page %}
 
@@ -13,7 +14,10 @@
       {% if view.kwargs.board is not None %}
         <ul class="nav navbar-nav">
           <span class="navbar-text">{{ view.board.name }}</span>
-          <li class="{% if request.get_full_path == top_page %}active{% endif %}">
+          <li class="{% if request.path == recent_page %}active{% endif %}">
+            <a href="{{ recent_page }}">{% trans "Recent" %}</a>
+          </li>
+          <li class="{% if request.path == top_page %}active{% endif %}">
             <a href="{{ top_page }}">{% trans "Top" %}</a>
           </li>
         </ul>
