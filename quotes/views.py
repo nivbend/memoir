@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from httplib import NO_CONTENT, BAD_REQUEST
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 from django.db.models import Count
@@ -10,6 +11,11 @@ from django.views.generic import View, TemplateView, ListView, DetailView, Creat
 from django.http import HttpResponse, JsonResponse, Http404, QueryDict
 from django.http import HttpResponseForbidden
 from .models import Board, Quote, Comment
+
+try:
+    QUOTE_LIST_PAGINATION = settings.QUOTE_LIST_PAGINATION
+except AttributeError:
+    QUOTE_LIST_PAGINATION = 25
 
 class BoardViewMixin(object):
     @property
@@ -30,6 +36,7 @@ class QuoteList(ListView, BoardViewMixin):
     model = Quote
     template_name = 'quotes/list.html'
     context_object_name = 'quotes'
+    paginate_by = QUOTE_LIST_PAGINATION
 
     def get_queryset(self):
         queryset = super(QuoteList, self).get_queryset() \
@@ -37,7 +44,6 @@ class QuoteList(ListView, BoardViewMixin):
 
         author = self.request.GET.get('by', None)
         mentions = self.request.GET.get('mentioned', None)
-        limit = self.request.GET.get('limit', None)
 
         # Filter by author.
         if author is not None:
@@ -48,13 +54,6 @@ class QuoteList(ListView, BoardViewMixin):
             # Split mentioned list and remove any empty items.
             mentions = set(mentions.split(',')) - set([''])
             queryset = queryset.filter(mentions__username__in = mentions).distinct()
-
-        # Limit number of results.
-        if limit is not None:
-            try:
-                queryset = queryset[:int(limit)]
-            except ValueError:
-                pass
 
         return queryset
 
@@ -89,6 +88,16 @@ class TopQuotes(QuoteList, BoardViewMixin):
     def get_queryset(self):
         queryset = super(TopQuotes, self).get_queryset().annotate(likers_count = Count('likers'))
         return queryset.order_by('-likers_count', '-created')
+
+    def get_context_data(self, **kwargs):
+        try:
+            return super(TopQuotes, self).get_context_data(**kwargs)
+        except Http404:
+            # If the user un-liked a quote, the pagination might get screwed up
+            # trying to move to the next page. In this case, we reset the page
+            # number to 1.
+            self.kwargs['page'] = 1
+            return super(TopQuotes, self).get_context_data(**kwargs)
 
 class LikeView(View, BoardViewMixin):
     def get(self, request, board, pk):

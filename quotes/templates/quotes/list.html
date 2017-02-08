@@ -8,5 +8,34 @@
     {% for quote in quotes %}
       {% include "single_quote.html" %}
     {% endfor %}
+    <nav class="text-center">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li>
+            <a href="?page={{ page_obj.previous_page_number }}">
+              <span>&laquo;</span>
+            </a>
+          </li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for number in page_obj.paginator.page_range %}
+          <li class="{% if number == page_obj.number %}active{% endif %}">
+            <a href="{{ request.path }}?page={{ number }}">
+              <span>{{ number }}</span>
+            </a>
+          </li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <li>
+            <a href="?page={{ page_obj.next_page_number }}">
+              <span>&raquo;</span>
+            </a>
+          </li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    </nav>
   </div>
 {% endblock %}
