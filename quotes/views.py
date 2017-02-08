@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from httplib import NO_CONTENT, BAD_REQUEST
 from django.conf import settings
 from django.shortcuts import get_object_or_404
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -82,7 +82,9 @@ class QuoteEdit(UpdateView, BoardViewMixin):
 @method_decorator(login_required, name = 'dispatch')
 class QuoteDelete(DeleteView, BoardViewMixin):
     model = Quote
-    success_url = reverse_lazy('index')
+
+    def get_success_url(self):
+        return reverse('board:list', kwargs = {'board': self.board.slug, })
 
 class TopQuotes(QuoteList, BoardViewMixin):
     def get_queryset(self):
