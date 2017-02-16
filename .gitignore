@@ -6,4 +6,5 @@ dist/
 
 db.sqlite3
 Memoir/local_settings.py
+Memoir/ldap_settings.py
 /locale/**/*.mo

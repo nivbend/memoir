@@ -4,12 +4,13 @@ from django.core.urlresolvers import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.conf import settings
 from django.db.models import Model, CASCADE
-from django.db.models import OneToOneField, CharField
+from django.db.models import OneToOneField, CharField, URLField
 
 @python_2_unicode_compatible
 class UserProfile(Model):
     user = OneToOneField(settings.AUTH_USER_MODEL, on_delete = CASCADE, related_name = 'profile')
     nickname = CharField(max_length = 20, blank = True)
+    image_url = URLField(blank = True)
 
     @property
     def boards(self):

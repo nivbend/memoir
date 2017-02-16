@@ -5,16 +5,28 @@
 {% block content %}
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
-      {% spaceless %}
+    {% if profile.image_url %}
+      <div class="col-md-2">
+        <img class="img-thumbnail" src="{{ profile.image_url }}">
+      </div>
+      <div class="col-md-10">
         <h1>
           {{ profile.user.get_full_name|default:profile.user.username }}
           {% if profile.nickname %}
             <small>({{ profile.nickname }})</small>
           {% endif %}
         </h1>
-      {% endspaceless %}
-    </div>
+      </div>
+    {% else %}
+      <div class="col-md-12">
+        <h1>
+          {{ profile.user.get_full_name|default:profile.user.username }}
+          {% if profile.nickname %}
+            <small>({{ profile.nickname }})</small>
+          {% endif %}
+        </h1>
+      </div>
+    {% endif %}
   </div>
   <div class="row">
     <div class="col-md-12">
