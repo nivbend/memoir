@@ -22,11 +22,15 @@ BASE_DIR = dirname(dirname(abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'k@br^)(k)oux71m8-d)9p!8*50k-#k5zzzq1sul@k9zg#i(@vu'
+try:
+    with open(join(BASE_DIR, 'secret_key')) as key:
+	SECRET_KEY = key.read().rstrip('\n')
+except IOError:
+    from os import environ
+    SECRET_KEY = environ.get('MEMOIR_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -142,9 +146,10 @@ LOCALE_PATHS = (
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = join(BASE_DIR, 'static/')
 
 STATICFILES_DIRS = [
-    join(BASE_DIR, 'static/'),
+    join(BASE_DIR, 'resources/'),
 ]
 
 try:

@@ -4,6 +4,8 @@ build/
 dist/
 *.egg-info/
 
-db.sqlite3
-Memoir/local_settings.py
+/secret_key
+/db.sqlite3
+/Memoir/local_settings.py
 /locale/**/*.mo
+/static/*
