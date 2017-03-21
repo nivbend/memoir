@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-08 22:21+0000\n"
+"POT-Creation-Date: 2017-03-21 21:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Niv Ben-David <nivbend@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,25 +18,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: Memoir/settings.py:132
+#: Memoir/settings.py:136
 msgid "English"
 msgstr "אנגלית"
 
-#: Memoir/settings.py:133
+#: Memoir/settings.py:137
 msgid "Hebrew"
 msgstr "עברית"
 
 #: profiles/templates/profiles/login.html:6
-#: profiles/templates/profiles/login.html:21 templates/navbar.html:43
+#: profiles/templates/profiles/login.html:21 templates/navbar.html:44
 msgid "Login"
 msgstr "התחבר"
 
-#: profiles/templates/profiles/user_detail.html:22
+#: profiles/templates/profiles/user_detail.html:34
 #: quotes/templates/quotes/list.html:4
 msgid "Quotes"
 msgstr "ציטוטים"
 
-#: profiles/templates/profiles/user_detail.html:23
+#: profiles/templates/profiles/user_detail.html:35
 msgid "Mentions"
 msgstr "איזכורים"
 
@@ -72,7 +72,7 @@ msgid "Likes:"
 msgstr "אהבו:"
 
 #: quotes/templates/quotes/detail.html:23
-#: quotes/templates/quotes/quote/comments.html:24
+#: quotes/templates/quotes/parts/comments.html:24
 msgid "What do you have to say?"
 msgstr "מה יש לך להגיד?"
 
@@ -85,7 +85,7 @@ msgid "Update "
 msgstr "ערוך "
 
 #: quotes/templates/quotes/edit.html:20
-#: quotes/templates/quotes/quote/comments.html:30
+#: quotes/templates/quotes/parts/comments.html:30
 msgid "Cancel"
 msgstr "בטל"
 
@@ -105,27 +105,39 @@ msgstr "את/ה, "
 msgid "You"
 msgstr "את/ה"
 
-#: quotes/templates/quotes/quote/comments.html:15
-#: quotes/templates/quotes/quote/comments.html:31
+#: quotes/templates/quotes/parts/comments.html:15
+#: quotes/templates/quotes/parts/comments.html:31
 msgid "Edit"
 msgstr "ערוך"
 
-#: quotes/templates/quotes/quote/comments.html:16
+#: quotes/templates/quotes/parts/comments.html:16
 msgid "Delete"
 msgstr "מחק"
 
-#: quotes/templates/quotes/quote/comments.html:18
+#: quotes/templates/quotes/parts/comments.html:18
 #, python-format
 msgid "%(t)s ago"
 msgstr "לפני %(t)s"
 
-#: quotes/templates/quotes/quote/delete_modal.html:14
+#: quotes/templates/quotes/parts/delete_modal.html:14
 msgid "Are you certain you want to delete the quote?"
 msgstr "האם את/ה בטוח/ה שאת/ה רוצה למחוק את הציטוט?"
 
-#: quotes/templates/quotes/quote/delete_modal.html:21
+#: quotes/templates/quotes/parts/delete_modal.html:21
 msgid "I'm sure"
 msgstr "אני בטוח/ה"
+
+#: templates/about.html:4 templates/about.html:11 templates/navbar.html:35
+msgid "About Memoir"
+msgstr "על Memoir"
+
+#: templates/about.html:13
+msgid "This is a quotes server made with &lt;3 by Niv Ben-David."
+msgstr "בפניכם שרת לשמירת ציטוטים, הוכן ב-3&gt; ע\"י ניב בן-דוד."
+
+#: templates/about.html:14
+msgid "For any issues, remarks, suggestions or otherwise, please see:"
+msgstr "לכל בעיה, הערה או הצעה, ניתן לפנות לכתובת:"
 
 #: templates/index.html:24
 msgid "No boards, apparently"
@@ -139,11 +151,11 @@ msgstr "אחרונים"
 msgid "Top"
 msgstr "נבחרים"
 
-#: templates/navbar.html:37
+#: templates/navbar.html:38
 msgid "Logged in as "
 msgstr "מחובר/ת כ"
 
-#: templates/navbar.html:40
+#: templates/navbar.html:41
 msgid "switch"
 msgstr "החלף משתמש"
 

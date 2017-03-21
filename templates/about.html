@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "About Memoir" %}{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="jumbotron">
+          <h1>{% trans "About Memoir" %}</h1>
+          <p>
+          {% spaceless %}
+            {% trans "This is a quotes server made with &lt;3 by Niv Ben-David." %}<br/>
+            {% trans "For any issues, remarks, suggestions or otherwise, please see:" %}
+            <a href="http://github.com/nivbend/memoir">github.com/nivbend/memoir</a>
+          {% endspaceless %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
