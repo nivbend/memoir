@@ -1,3 +1,5 @@
+[![GitHub release](https://img.shields.io/github/release/nivbend/memoir.svg)](https://github.com/nivbend/memoir/releases/latest)
+
 # Memoir
 A quote storing server.
 
